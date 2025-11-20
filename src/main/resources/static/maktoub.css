@@ -1,0 +1,192 @@
+/* Maktoub Page Specific Styles */
+
+/* Maktoub Styles */
+.maktoub-intro {
+    background: var(--bg-white);
+    padding: 80px 0;
+}
+
+.maktoub-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.maktoub-text {
+    text-align: center;
+}
+
+.maktoub-featured {
+    background: var(--bg-light);
+    padding: 80px 0;
+}
+
+.maktoub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.maktoub-card {
+    background: var(--bg-white);
+    padding: 2.5rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.maktoub-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.maktoub-category {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.maktoub-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 0.75rem;
+    font-size: 1.4rem;
+}
+
+.maktoub-author {
+    color: var(--accent-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.maktoub-excerpt {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+}
+
+.maktoub-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.maktoub-link:hover {
+    color: var(--accent-color);
+}
+
+.maktoub-submission {
+    background: var(--bg-white);
+    padding: 80px 0;
+}
+
+.submission-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.submission-info h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+.submission-info p {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+}
+
+.submission-list,
+.guidelines-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+}
+
+.submission-list li,
+.guidelines-list li {
+    padding: 0.75rem 0;
+    padding-left: 2rem;
+    position: relative;
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+.submission-list li::before,
+.guidelines-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.submission-info h4 {
+    color: var(--primary-color);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.maktoub-archive {
+    background: var(--bg-light);
+    padding: 80px 0;
+}
+
+.archive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.archive-item {
+    background: var(--bg-white);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+}
+
+.archive-item h4 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.archive-item ul {
+    list-style: none;
+    padding: 0;
+}
+
+.archive-item ul li {
+    margin-bottom: 0.75rem;
+}
+
+.archive-item ul li a {
+    color: var(--text-dark);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.archive-item ul li a:hover {
+    color: var(--primary-color);
+}
+
+/* Responsive Design for Maktoub Page */
+@media (max-width: 768px) {
+    .submission-content {
+        grid-template-columns: 1fr;
+    }
+}
+

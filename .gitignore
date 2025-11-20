@@ -38,5 +38,6 @@ build/
 src/.DS_Store
 src/main/.DS_Store
 src/main/ressources/.DS_Store
+.DS_Store
 
 

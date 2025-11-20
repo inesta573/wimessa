@@ -34,9 +34,11 @@
 .feature-card {
     text-align: center;
     padding: 2rem;
-    background: var(--bg-light);
+    background-color: var(--bg-white);
+    background-image: var(--pattern-bg);
     border-radius: 10px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: var(--shadow);
 }
 
 .feature-card:hover {
@@ -62,7 +64,8 @@
 
 /* Mission & Vision */
 .mission-vision {
-    background: var(--bg-light);
+    background-color: var(--bg-light);
+    background-image: var(--pattern-bg);
     padding: 80px 0;
 }
 
@@ -104,7 +107,8 @@
 
 /* Leadership Section */
 .leadership {
-    background: var(--bg-light);
+    background-color: var(--bg-light);
+    background-image: var(--pattern-bg);
     padding: 80px 0;
 }
 

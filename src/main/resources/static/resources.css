@@ -70,7 +70,8 @@
 
 /* Additional Resources */
 .additional-resources {
-    background: var(--bg-light);
+    background-color: var(--bg-light);
+    background-image: var(--pattern-bg);
     padding: 80px 0;
 }
 

@@ -2,7 +2,8 @@
 
 /* Events Section */
 .events {
-    background: var(--bg-light);
+    background-color: var(--bg-light);
+    background-image: var(--pattern-bg);
 }
 
 .events-grid {
@@ -118,7 +119,8 @@
 
 /* Event CTA */
 .event-cta {
-    background: var(--bg-light);
+    background-color: var(--bg-light);
+    background-image: var(--pattern-bg);
     padding: 80px 0;
 }
 

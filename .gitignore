@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Environment Variables ###
+.env
+
+src/.DS_Store
+src/main/.DS_Store
+src/main/ressources/.DS_Store
+
+

@@ -29,4 +29,14 @@ public class HomeController {
     public String maktoub(){
         return "maktoub.html";
     }
+
+    @RequestMapping("/login")
+    public String login(){
+        return "login.html";
+    }
+
+    @RequestMapping("/admin")
+    public String admin(){
+        return "admin.html";
+    }
 }

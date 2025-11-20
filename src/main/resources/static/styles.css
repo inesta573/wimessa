@@ -341,9 +341,15 @@ section {
     color: var(--accent-light);
 }
 
+.footer-section ul {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
 .footer-section a img {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     object-fit: contain;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }

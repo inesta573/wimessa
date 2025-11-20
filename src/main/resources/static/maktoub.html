@@ -25,6 +25,7 @@
                 <li><a href="resources.html" class="nav-link">Resources</a></li>
                 <li><a href="maktoub.html" class="nav-link active">Maktoub</a></li>
                 <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                <li><a href="login.html" class="nav-link">Admin</a></li>
             </ul>
             <div class="hamburger" id="hamburger">
                 <span></span>
@@ -60,28 +61,8 @@
                 <h2 class="section-title">Featured Writings</h2>
                 <div class="title-underline"></div>
             </div>
-            <div class="maktoub-grid">
-                <div class="maktoub-card">
-                    <div class="maktoub-category">Academic Essay</div>
-                    <h3>essay 1 you guys have</h3>
-                    <p class="maktoub-author">By Student Name | date</p>
-                    <p class="maktoub-excerpt">Statement 47</p>
-                    <a href="#" class="maktoub-link">Read More →</a>
-                </div>
-                <div class="maktoub-card">
-                    <div class="maktoub-category">Personal Reflection</div>
-                    <h3>essay 2 you guys have</h3>
-                    <p class="maktoub-author">By Student Name | date</p>
-                    <p class="maktoub-excerpt">Statement 48</p>
-                    <a href="#" class="maktoub-link">Read More →</a>
-                </div>
-                <div class="maktoub-card">
-                    <div class="maktoub-category">Research Summary</div>
-                    <h3>essay 3 you guys have</h3>
-                    <p class="maktoub-author">By Student Name | date</p>
-                    <p class="maktoub-excerpt">Statement 49</p>
-                    <a href="#" class="maktoub-link">Read More →</a>
-                </div>
+            <div class="maktoub-grid" id="maktoub-grid">
+                <!-- Stories will be loaded dynamically -->
             </div>
         </div>
     </section>
@@ -174,6 +155,39 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // Fetch and display maktoub stories
+        function loadMaktoubStories() {
+            fetch('/api/public/maktoub')
+                .then(response => response.json())
+                .then(stories => {
+                    const grid = document.getElementById('maktoub-grid');
+
+                    if (stories.length === 0) {
+                        grid.innerHTML = '<p style="text-align: center; color: #666;">No stories available yet. Check back soon!</p>';
+                        return;
+                    }
+
+                    grid.innerHTML = stories.map(story => `
+                        <div class="maktoub-card">
+                            <div class="maktoub-category">${story.paperType}</div>
+                            <h3>${story.title}</h3>
+                            <p class="maktoub-author">By ${story.studentName} | ${new Date(story.date).toLocaleDateString()}</p>
+                            <p class="maktoub-excerpt">${story.description}</p>
+                            <a href="${story.pdfUrl}" target="_blank" class="maktoub-link">Read More →</a>
+                        </div>
+                    `).join('');
+                })
+                .catch(error => {
+                    console.error('Error loading stories:', error);
+                    document.getElementById('maktoub-grid').innerHTML =
+                        '<p style="text-align: center; color: #666;">Unable to load stories. Please try again later.</p>';
+                });
+        }
+
+        // Load stories when page loads
+        document.addEventListener('DOMContentLoaded', loadMaktoubStories);
+    </script>
 </body>
 </html>
 

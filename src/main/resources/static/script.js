@@ -122,7 +122,7 @@ navLinks.forEach(link => {
 if (currentPage === 'index.html' || currentPage === '') {
     window.addEventListener('scroll', () => {
         const sections = document.querySelectorAll('section[id]');
-        
+
         let current = '';
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
@@ -131,7 +131,7 @@ if (currentPage === 'index.html' || currentPage === '') {
                 current = section.getAttribute('id');
             }
         });
-        
+
         navLinks.forEach(link => {
             const linkHref = link.getAttribute('href');
             // Only update hash links, not page links
@@ -144,4 +144,107 @@ if (currentPage === 'index.html' || currentPage === '') {
         });
     });
 }
+
+// Load Events Dynamically
+function loadEvents() {
+    fetch('/api/public/events')
+        .then(response => response.json())
+        .then(events => {
+            // Separate events into upcoming and past
+            const now = new Date();
+            const upcomingEvents = events.filter(event => new Date(event.eventDate) >= now && event.category === 'upcoming');
+            const pastEvents = events.filter(event => new Date(event.eventDate) < now || event.category === 'past');
+
+            // Populate upcoming events
+            const upcomingGrid = document.querySelector('.events-grid');
+            if (upcomingGrid) {
+                if (upcomingEvents.length === 0) {
+                    upcomingGrid.innerHTML = '<p style="text-align: center; grid-column: 1 / -1;">No upcoming events at this time. Check back soon!</p>';
+                } else {
+                    upcomingGrid.innerHTML = upcomingEvents.map(event => {
+                        const eventDate = new Date(event.eventDate);
+                        const day = eventDate.getDate();
+                        const month = eventDate.toLocaleDateString('en-US', { month: 'short' });
+
+                        return `
+                            <div class="event-card">
+                                <div class="event-date">
+                                    <span class="date-day">${day}</span>
+                                    <span class="date-month">${month}</span>
+                                </div>
+                                <div class="event-content">
+                                    <h3>${event.title}</h3>
+                                    <p class="event-time">📍 Location: ${event.location} | ${event.time}</p>
+                                    <p class="event-description">${event.description}</p>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+
+            // Populate past events
+            const pastGrid = document.querySelector('.past-events-grid');
+            if (pastGrid) {
+                if (pastEvents.length === 0) {
+                    pastGrid.innerHTML = '<p style="text-align: center; grid-column: 1 / -1;">No past events to display.</p>';
+                } else {
+                    pastGrid.innerHTML = pastEvents.map(event => `
+                        <div class="past-event-item">
+                            <h4>${event.title}</h4>
+                            <p>${event.description}</p>
+                            <small>${new Date(event.eventDate).toLocaleDateString()}</small>
+                        </div>
+                    `).join('');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error loading events:', error);
+            const upcomingGrid = document.querySelector('.events-grid');
+            if (upcomingGrid) {
+                upcomingGrid.innerHTML = '<p style="text-align: center; grid-column: 1 / -1;">Error loading events. Please try again later.</p>';
+            }
+        });
+}
+
+// Load Resources Dynamically
+function loadResources() {
+    fetch('/api/public/resources')
+        .then(response => response.json())
+        .then(resources => {
+            const resourcesGrid = document.querySelector('.resources-grid');
+            if (resourcesGrid) {
+                if (resources.length === 0) {
+                    resourcesGrid.innerHTML = '<p style="text-align: center; grid-column: 1 / -1;">No resources available at this time. Check back soon!</p>';
+                } else {
+                    resourcesGrid.innerHTML = resources.map(resource => `
+                        <div class="resource-card">
+                            <h3>${resource.title}</h3>
+                            <p>${resource.description}</p>
+                            <p><strong>Category:</strong> ${resource.category}</p>
+                            <a href="${resource.link}" target="_blank" class="resource-link">Explore →</a>
+                        </div>
+                    `).join('');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error loading resources:', error);
+            const resourcesGrid = document.querySelector('.resources-grid');
+            if (resourcesGrid) {
+                resourcesGrid.innerHTML = '<p style="text-align: center; grid-column: 1 / -1;">Error loading resources. Please try again later.</p>';
+            }
+        });
+}
+
+// Load data when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    // Check which page we're on and load appropriate data
+    if (currentPage === 'events.html') {
+        loadEvents();
+    } else if (currentPage === 'resources.html') {
+        loadResources();
+    }
+});
 

@@ -244,33 +244,107 @@ public class AdminController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Admin management endpoints
-    @GetMapping("/admins")
-    public List<Admin> getAllAdmins() {
-        return adminRepository.findAll();
-    }
-
-    @PostMapping("/admins")
-    public ResponseEntity<?> createAdmin(@RequestBody AdminRequest request) {
-        // Check if username already exists
-        if (adminRepository.findByUsername(request.getUsername()).isPresent()) {
-            return ResponseEntity.badRequest().body("Username already exists");
+    // Get current user info
+    @GetMapping("/current-user")
+    public ResponseEntity<?> getCurrentUser(java.security.Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(401).body("Not authenticated");
         }
 
-        Admin admin = new Admin();
-        admin.setUsername(request.getUsername());
-        admin.setPassword(passwordEncoder.encode(request.getPassword()));
-        admin.setRole("ADMIN");
-
-        return ResponseEntity.ok(adminRepository.save(admin));
+        return adminRepository.findByUsername(principal.getName())
+                .map(admin -> {
+                    UserInfo userInfo = new UserInfo();
+                    userInfo.setUsername(admin.getUsername());
+                    userInfo.setRole(admin.getRole());
+                    return ResponseEntity.ok(userInfo);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/admins/{id}")
-    public ResponseEntity<?> deleteAdmin(@PathVariable Long id) {
-        return adminRepository.findById(id)
+    // Admin management endpoints
+    @GetMapping("/users")
+    public ResponseEntity<?> getAllUsers(java.security.Principal principal) {
+        // Check if current user is admin
+        return adminRepository.findByUsername(principal.getName())
+                .map(currentUser -> {
+                    if (!"ADMIN".equals(currentUser.getRole())) {
+                        return (ResponseEntity<?>) ResponseEntity.status(403).body("Access denied");
+                    }
+                    List<Admin> users = adminRepository.findAll();
+                    return (ResponseEntity<?>) ResponseEntity.ok(users);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/users")
+    public ResponseEntity<?> createUser(@RequestBody UserRequest request, java.security.Principal principal) {
+        // Check if current user is admin
+        return adminRepository.findByUsername(principal.getName())
+                .map(currentUser -> {
+                    if (!"ADMIN".equals(currentUser.getRole())) {
+                        return ResponseEntity.status(403).body("Only admins can create users");
+                    }
+
+                    // Check if username already exists
+                    if (adminRepository.findByUsername(request.getUsername()).isPresent()) {
+                        return ResponseEntity.badRequest().body("Username already exists");
+                    }
+
+                    Admin newUser = new Admin();
+                    newUser.setUsername(request.getUsername());
+                    newUser.setPassword(passwordEncoder.encode(request.getPassword()));
+                    newUser.setRole(request.getRole() != null ? request.getRole() : "USER");
+
+                    return ResponseEntity.ok(adminRepository.save(newUser));
+                })
+                .orElse(ResponseEntity.status(401).body("Not authenticated"));
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id, java.security.Principal principal) {
+        // Check if current user is admin
+        return adminRepository.findByUsername(principal.getName())
+                .map(currentUser -> {
+                    if (!"ADMIN".equals(currentUser.getRole())) {
+                        return ResponseEntity.status(403).body("Only admins can delete users");
+                    }
+
+                    // Prevent deleting yourself
+                    if (currentUser.getId().equals(id)) {
+                        return ResponseEntity.badRequest().body("Cannot delete your own account");
+                    }
+
+                    return adminRepository.findById(id)
+                            .map(userToDelete -> {
+                                adminRepository.delete(userToDelete);
+                                return ResponseEntity.ok().body("User deleted successfully");
+                            })
+                            .orElse(ResponseEntity.notFound().build());
+                })
+                .orElse(ResponseEntity.status(401).body("Not authenticated"));
+    }
+
+    // Password change endpoint
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(
+            @RequestBody PasswordChangeRequest request,
+            java.security.Principal principal) {
+
+        // Get the currently authenticated user
+        String username = principal.getName();
+
+        return adminRepository.findByUsername(username)
                 .map(admin -> {
-                    adminRepository.delete(admin);
-                    return ResponseEntity.ok().build();
+                    // Verify current password
+                    if (!passwordEncoder.matches(request.getCurrentPassword(), admin.getPassword())) {
+                        return ResponseEntity.badRequest().body("Current password is incorrect");
+                    }
+
+                    // Update password
+                    admin.setPassword(passwordEncoder.encode(request.getNewPassword()));
+                    adminRepository.save(admin);
+
+                    return ResponseEntity.ok().body("Password updated successfully");
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -294,6 +368,28 @@ public class AdminController {
 
         public void setPassword(String password) {
             this.password = password;
+        }
+    }
+
+    // DTO for password change
+    public static class PasswordChangeRequest {
+        private String currentPassword;
+        private String newPassword;
+
+        public String getCurrentPassword() {
+            return currentPassword;
+        }
+
+        public void setCurrentPassword(String currentPassword) {
+            this.currentPassword = currentPassword;
+        }
+
+        public String getNewPassword() {
+            return newPassword;
+        }
+
+        public void setNewPassword(String newPassword) {
+            this.newPassword = newPassword;
         }
     }
 }

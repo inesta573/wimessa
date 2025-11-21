@@ -33,10 +33,8 @@
                 <li><a href="#" class="admin-menu-item active" data-section="events">Events</a></li>
                 <li><a href="#" class="admin-menu-item" data-section="resources">Resources</a></li>
                 <li><a href="#" class="admin-menu-item" data-section="maktoub">Maktoub</a></li>
+                <li id="users-menu-item" style="display: none;"><a href="#" class="admin-menu-item" data-section="users">Users</a></li>
                 <li><a href="#" class="admin-menu-item" data-section="settings">Settings</a></li>
-
-
-
             </ul>
         </div>
 
@@ -192,6 +190,79 @@
                 <div class="admin-list">
                     <h3>All Stories</h3>
                     <div id="maktoub-list"></div>
+                </div>
+            </section>
+
+            <!-- Users Section (Admin Only) -->
+            <section id="users-section" class="admin-section" style="display: none;">
+                <div class="section-header">
+                    <h2>Manage Users</h2>
+                    <button class="btn btn-primary" onclick="showUserForm()">Add User</button>
+                </div>
+
+                <!-- User Form -->
+                <div id="user-form-container" class="form-container" style="display: none;">
+                    <h3 id="user-form-title">Add New User</h3>
+                    <div id="user-form-message" class="message" style="display: none;"></div>
+                    <form id="user-form">
+                        <div class="form-group">
+                            <label for="user-username">Username</label>
+                            <input type="text" id="user-username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-password">Password</label>
+                            <input type="password" id="user-password" required minlength="8">
+                            <small>Password must be at least 8 characters long</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-role">Role</label>
+                            <select id="user-role" required>
+                                <option value="USER">User</option>
+                                <option value="ADMIN">Admin</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Create User</button>
+                            <button type="button" class="btn btn-secondary" onclick="hideUserForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Users List -->
+                <div class="admin-list">
+                    <h3>All Users</h3>
+                    <div id="users-list"></div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="admin-section" style="display: none;">
+                <div class="section-header">
+                    <h2>Settings</h2>
+                </div>
+
+                <!-- Password Change Form -->
+                <div class="settings-container">
+                    <h3>Change Password</h3>
+                    <div id="password-message" class="message" style="display: none;"></div>
+                    <form id="password-form" class="settings-form">
+                        <div class="form-group">
+                            <label for="current-password">Current Password</label>
+                            <input type="password" id="current-password" required autocomplete="current-password">
+                        </div>
+                        <div class="form-group">
+                            <label for="new-password">New Password</label>
+                            <input type="password" id="new-password" required minlength="8" autocomplete="new-password">
+                            <small>Password must be at least 8 characters long</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm New Password</label>
+                            <input type="password" id="confirm-password" required minlength="8" autocomplete="new-password">
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Update Password</button>
+                        </div>
+                    </form>
                 </div>
             </section>
         </div>

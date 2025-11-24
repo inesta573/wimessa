@@ -32,7 +32,11 @@ public class AdminController {
     @Autowired
     private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private TeamMemberRepository teamMemberRepository;
+
     private static final String UPLOAD_DIR = "uploads/maktoub/";
+    private static final String TEAM_UPLOAD_DIR = "uploads/team/";
 
     // Event endpoints
     @GetMapping("/events")
@@ -239,6 +243,130 @@ public class AdminController {
                     }
 
                     maktoubRepository.delete(maktoub);
+                    return ResponseEntity.ok().build();
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Team Member endpoints
+    @GetMapping("/team")
+    public List<TeamMember> getAllTeamMembers() {
+        return teamMemberRepository.findAllByOrderByDisplayOrderAsc();
+    }
+
+    @GetMapping("/team/{id}")
+    public ResponseEntity<TeamMember> getTeamMember(@PathVariable Long id) {
+        return teamMemberRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/team")
+    public ResponseEntity<TeamMember> createTeamMember(
+            @RequestParam("name") String name,
+            @RequestParam("position") String position,
+            @RequestParam("description") String description,
+            @RequestParam("displayOrder") Integer displayOrder,
+            @RequestParam(value = "image", required = false) MultipartFile imageFile) {
+
+        try {
+            TeamMember teamMember = new TeamMember();
+            teamMember.setName(name);
+            teamMember.setPosition(position);
+            teamMember.setDescription(description);
+            teamMember.setDisplayOrder(displayOrder);
+
+            // Handle image upload
+            if (imageFile != null && !imageFile.isEmpty()) {
+                // Create upload directory if it doesn't exist
+                Path uploadPath = Paths.get(TEAM_UPLOAD_DIR);
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                // Generate unique filename
+                String originalFilename = imageFile.getOriginalFilename();
+                String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+                String uniqueFilename = UUID.randomUUID().toString() + fileExtension;
+                Path filePath = uploadPath.resolve(uniqueFilename);
+
+                // Save the file
+                Files.copy(imageFile.getInputStream(), filePath);
+                teamMember.setImageUrl("/uploads/team/" + uniqueFilename);
+            }
+
+            return ResponseEntity.ok(teamMemberRepository.save(teamMember));
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PutMapping("/team/{id}")
+    public ResponseEntity<?> updateTeamMember(
+            @PathVariable Long id,
+            @RequestParam("name") String name,
+            @RequestParam("position") String position,
+            @RequestParam("description") String description,
+            @RequestParam("displayOrder") Integer displayOrder,
+            @RequestParam(value = "image", required = false) MultipartFile imageFile) {
+
+        return teamMemberRepository.findById(id)
+                .map(teamMember -> {
+                    teamMember.setName(name);
+                    teamMember.setPosition(position);
+                    teamMember.setDescription(description);
+                    teamMember.setDisplayOrder(displayOrder);
+
+                    // Update image if a new file is provided
+                    if (imageFile != null && !imageFile.isEmpty()) {
+                        try {
+                            // Delete old file
+                            String oldImageUrl = teamMember.getImageUrl();
+                            if (oldImageUrl != null && oldImageUrl.startsWith("/uploads/team/")) {
+                                Path oldFilePath = Paths.get(oldImageUrl.replace("/uploads/team/", TEAM_UPLOAD_DIR));
+                                Files.deleteIfExists(oldFilePath);
+                            }
+
+                            // Create upload directory if it doesn't exist
+                            Path uploadPath = Paths.get(TEAM_UPLOAD_DIR);
+                            if (!Files.exists(uploadPath)) {
+                                Files.createDirectories(uploadPath);
+                            }
+
+                            // Save new file
+                            String originalFilename = imageFile.getOriginalFilename();
+                            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+                            String uniqueFilename = UUID.randomUUID().toString() + fileExtension;
+                            Path filePath = uploadPath.resolve(uniqueFilename);
+                            Files.copy(imageFile.getInputStream(), filePath);
+
+                            teamMember.setImageUrl("/uploads/team/" + uniqueFilename);
+                        } catch (IOException e) {
+                            return (ResponseEntity<?>) ResponseEntity.internalServerError().build();
+                        }
+                    }
+
+                    return (ResponseEntity<?>) ResponseEntity.ok(teamMemberRepository.save(teamMember));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/team/{id}")
+    public ResponseEntity<?> deleteTeamMember(@PathVariable Long id) {
+        return teamMemberRepository.findById(id)
+                .map(teamMember -> {
+                    // Delete the image file
+                    String imageUrl = teamMember.getImageUrl();
+                    if (imageUrl != null && imageUrl.startsWith("/uploads/team/")) {
+                        try {
+                            Path filePath = Paths.get(imageUrl.replace("/uploads/team/", TEAM_UPLOAD_DIR));
+                            Files.deleteIfExists(filePath);
+                        } catch (IOException e) {
+                            // Log error but continue with deletion
+                        }
+                    }
+
+                    teamMemberRepository.delete(teamMember);
                     return ResponseEntity.ok().build();
                 })
                 .orElse(ResponseEntity.notFound().build());

@@ -37,6 +37,8 @@ document.querySelectorAll('.admin-menu-item').forEach(item => {
             loadResources();
         } else if (section === 'maktoub') {
             loadMaktoub();
+        } else if (section === 'team') {
+            loadTeamMembers();
         } else if (section === 'users') {
             loadUsers();
         }
@@ -362,6 +364,115 @@ document.getElementById('maktoub-form').addEventListener('submit', (e) => {
         document.getElementById('maktoub-pdf').setAttribute('required', 'required');
     })
     .catch(error => console.error('Error saving story:', error));
+});
+
+// Team Management
+let editingTeamId = null;
+
+function showTeamForm() {
+    document.getElementById('team-form-container').style.display = 'block';
+    document.getElementById('team-form-title').textContent = 'Add New Team Member';
+    document.getElementById('team-form').reset();
+    document.getElementById('team-id').value = '';
+    document.getElementById('team-image').setAttribute('required', 'required');
+    editingTeamId = null;
+}
+
+function hideTeamForm() {
+    document.getElementById('team-form-container').style.display = 'none';
+    document.getElementById('team-form').reset();
+    editingTeamId = null;
+}
+
+function editTeamMember(id) {
+    fetch(`/api/admin/team/${id}`)
+        .then(response => response.json())
+        .then(member => {
+            document.getElementById('team-form-title').textContent = 'Edit Team Member';
+            document.getElementById('team-id').value = member.id;
+            document.getElementById('team-name').value = member.name;
+            document.getElementById('team-position').value = member.position;
+            document.getElementById('team-description').value = member.description;
+            document.getElementById('team-display-order').value = member.displayOrder;
+            // Note: Can't prefill file input for security reasons
+            document.getElementById('team-image').removeAttribute('required');
+            document.getElementById('team-form-container').style.display = 'block';
+            editingTeamId = id;
+        })
+        .catch(error => console.error('Error loading team member:', error));
+}
+
+function deleteTeamMember(id) {
+    if (confirm('Are you sure you want to delete this team member?')) {
+        fetch(`/api/admin/team/${id}`, {
+            method: 'DELETE'
+        })
+        .then(() => {
+            loadTeamMembers();
+        })
+        .catch(error => console.error('Error deleting team member:', error));
+    }
+}
+
+function loadTeamMembers() {
+    fetch('/api/admin/team')
+        .then(response => response.json())
+        .then(members => {
+            const list = document.getElementById('team-list');
+            if (members.length === 0) {
+                list.innerHTML = '<div class="empty-state">No team members found. Click "Add Team Member" to create one.</div>';
+                return;
+            }
+
+            list.innerHTML = members.map(member => `
+                <div class="list-item">
+                    ${member.imageUrl ? `<img src="${member.imageUrl}" alt="${member.name}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; margin-bottom: 10px;">` : ''}
+                    <h4>${member.name}</h4>
+                    <p><strong>Position:</strong> ${member.position}</p>
+                    <p><strong>Description:</strong> ${member.description}</p>
+                    <p><strong>Display Order:</strong> ${member.displayOrder}</p>
+                    <div class="list-item-actions">
+                        <button class="btn btn-edit" onclick="editTeamMember(${member.id})">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteTeamMember(${member.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        })
+        .catch(error => console.error('Error loading team members:', error));
+}
+
+document.getElementById('team-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('name', document.getElementById('team-name').value);
+    formData.append('position', document.getElementById('team-position').value);
+    formData.append('description', document.getElementById('team-description').value);
+    formData.append('displayOrder', document.getElementById('team-display-order').value);
+
+    const imageFile = document.getElementById('team-image').files[0];
+    if (imageFile) {
+        formData.append('image', imageFile);
+    }
+
+    const url = editingTeamId
+        ? `/api/admin/team/${editingTeamId}`
+        : '/api/admin/team';
+
+    const method = editingTeamId ? 'PUT' : 'POST';
+
+    fetch(url, {
+        method: method,
+        body: formData
+    })
+    .then(response => response.json())
+    .then(() => {
+        hideTeamForm();
+        loadTeamMembers();
+        // Reset the required attribute on the file input
+        document.getElementById('team-image').setAttribute('required', 'required');
+    })
+    .catch(error => console.error('Error saving team member:', error));
 });
 
 // Password Change

@@ -23,6 +23,9 @@ public class PublicApiController {
     @Autowired
     private AirtableService airtableService;
 
+    @Autowired
+    private TeamMemberRepository teamMemberRepository;
+
     @GetMapping("/maktoub")
     public List<Maktoub> getAllMaktoub() {
         return maktoubRepository.findAll();
@@ -36,5 +39,10 @@ public class PublicApiController {
     @GetMapping("/resources")
     public List<Resource> getAllResources() {
         return airtableService.getResources();
+    }
+
+    @GetMapping("/team")
+    public List<TeamMember> getAllTeamMembers() {
+        return teamMemberRepository.findAllByOrderByDisplayOrderAsc();
     }
 }

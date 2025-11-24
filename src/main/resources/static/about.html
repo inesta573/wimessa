@@ -111,6 +111,12 @@
                 <div class="title-underline"></div>
             </div>
             <p class="section-description">WIMESSA is run by dedicated students passionate about Islamic and Middle East studies. Our executive team works tirelessly to organize events, manage resources, and build our community.</p>
+
+            <!-- Team Grid -->
+            <div class="team-grid" id="team-grid">
+                <!-- Team members will be loaded dynamically -->
+            </div>
+
             <div class="cta-box">
                 <h3>Interested in Joining Our Team?</h3>
                 <p>We're always looking for enthusiastic members to help shape our association. Contact us to learn about available positions and opportunities.</p>
@@ -154,6 +160,64 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // Load team members dynamically
+        async function loadTeamMembers() {
+            try {
+                const response = await fetch('/api/public/team');
+                const teamMembers = await response.json();
+
+                const teamGrid = document.getElementById('team-grid');
+
+                if (teamMembers.length === 0) {
+                    teamGrid.innerHTML = '<p>No team members found.</p>';
+                    return;
+                }
+
+                // Group team members by rows (1, 3, 3 pattern as before)
+                // But we'll make it flexible - first member alone, then groups of 3
+                let html = '';
+
+                teamMembers.forEach((member, index) => {
+                    if (index === 0) {
+                        // First member gets their own centered row
+                        html += '<div class="team-row team-row-1">';
+                    } else if ((index - 1) % 3 === 0) {
+                        // Start new row every 3 members after the first
+                        if (index > 1) {
+                            html += '</div>';
+                        }
+                        html += '<div class="team-row team-row-3">';
+                    }
+
+                    const imageSrc = member.imageUrl || 'public/team/placeholder.jpg';
+                    html += `
+                        <div class="team-member">
+                            <div class="team-member-image">
+                                <img src="${imageSrc}" alt="${member.name}">
+                            </div>
+                            <h3 class="team-member-name">${member.name}</h3>
+                            <p class="team-member-role">${member.position}</p>
+                            <p class="team-member-description">${member.description}</p>
+                        </div>
+                    `;
+
+                    // Close the last row
+                    if (index === teamMembers.length - 1) {
+                        html += '</div>';
+                    }
+                });
+
+                teamGrid.innerHTML = html;
+            } catch (error) {
+                console.error('Error loading team members:', error);
+                document.getElementById('team-grid').innerHTML = '<p>Error loading team members.</p>';
+            }
+        }
+
+        // Load team members when page loads
+        document.addEventListener('DOMContentLoaded', loadTeamMembers);
+    </script>
 </body>
 </html>
 

@@ -68,6 +68,33 @@
     font-weight: bold;
 }
 
+/* Airtable Embed Section */
+.airtable-embed-section {
+    background: var(--bg-white);
+    padding: 80px 0;
+}
+
+.airtable-embed-section .section-description {
+    text-align: center;
+    color: var(--text-light);
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.airtable-embed-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.airtable-embed {
+    display: block;
+    border-radius: 10px;
+}
+
 /* Additional Resources */
 .additional-resources {
     background-color: var(--bg-light);

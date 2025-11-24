@@ -33,6 +33,7 @@
                 <li><a href="#" class="admin-menu-item active" data-section="events">Events</a></li>
                 <li><a href="#" class="admin-menu-item" data-section="resources">Resources</a></li>
                 <li><a href="#" class="admin-menu-item" data-section="maktoub">Maktoub</a></li>
+                <li><a href="#" class="admin-menu-item" data-section="team">Team</a></li>
                 <li id="users-menu-item" style="display: none;"><a href="#" class="admin-menu-item" data-section="users">Users</a></li>
                 <li><a href="#" class="admin-menu-item" data-section="settings">Settings</a></li>
             </ul>
@@ -193,6 +194,54 @@
                 </div>
             </section>
 
+            <!-- Team Section -->
+            <section id="team-section" class="admin-section" style="display: none;">
+                <div class="section-header">
+                    <h2>Manage Team Members</h2>
+                    <button class="btn btn-primary" onclick="showTeamForm()">Add Team Member</button>
+                </div>
+
+                <!-- Team Form -->
+                <div id="team-form-container" class="form-container" style="display: none;">
+                    <h3 id="team-form-title">Add New Team Member</h3>
+                    <form id="team-form" enctype="multipart/form-data">
+                        <input type="hidden" id="team-id">
+                        <div class="form-group">
+                            <label for="team-name">Name</label>
+                            <input type="text" id="team-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="team-position">Position</label>
+                            <input type="text" id="team-position" placeholder="e.g., President, VP Academic" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="team-description">Description</label>
+                            <textarea id="team-description" rows="4" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="team-display-order">Display Order</label>
+                            <input type="number" id="team-display-order" min="0" placeholder="e.g., 1, 2, 3" required>
+                            <small>Lower numbers appear first</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="team-image">Team Member Image</label>
+                            <input type="file" id="team-image" accept="image/*">
+                            <small>Upload an image for the team member (JPG, PNG, etc.)</small>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Save Team Member</button>
+                            <button type="button" class="btn btn-secondary" onclick="hideTeamForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Team List -->
+                <div class="admin-list">
+                    <h3>All Team Members</h3>
+                    <div id="team-list"></div>
+                </div>
+            </section>
+
             <!-- Users Section (Admin Only) -->
             <section id="users-section" class="admin-section" style="display: none;">
                 <div class="section-header">
@@ -211,8 +260,8 @@
                         </div>
                         <div class="form-group">
                             <label for="user-password">Password</label>
-                            <input type="password" id="user-password" required minlength="8">
-                            <small>Password must be at least 8 characters long</small>
+                            <input type="password" id="user-password" required minlength="6">
+                            <small>Password must be at least 6 characters long</small>
                         </div>
                         <div class="form-group">
                             <label for="user-role">Role</label>

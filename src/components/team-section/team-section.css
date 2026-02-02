@@ -1,0 +1,129 @@
+.team-section {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 5rem 4rem;
+  position: relative;
+  z-index: 1;
+  animation: heroLoad 0.8s ease-out forwards;
+}
+
+.team-section-title {
+  margin: 0 0 2rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: white;
+  text-align: center;
+}
+
+.team-section-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.team-section-row:last-child {
+  margin-bottom: 0;
+}
+
+.team-section-row--presidents {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.team-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+  padding-bottom: 1.5rem;
+}
+
+.team-card-image {
+  aspect-ratio: 1;
+  background: rgba(255, 255, 255, 0.12);
+  width: 100%;
+}
+
+.team-card-name {
+  margin: 1rem 1rem 0.25rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: white;
+}
+
+.team-card-role {
+  margin: 0 1rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.team-card-description {
+  margin: 0.5rem 1rem 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+@media (max-width: 992px) {
+  .team-section {
+    padding: 0 2rem 3rem;
+  }
+
+  .team-section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .team-section-row {
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .team-section {
+    padding: 0 1.5rem 2.5rem;
+  }
+
+  .team-section-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .team-section-row--presidents {
+    max-width: none;
+    grid-template-columns: 1fr;
+  }
+
+  .team-section-title {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .team-section {
+    padding: 0 1rem 2rem;
+  }
+
+  .team-section-title {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+}
+
+@keyframes heroLoad {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

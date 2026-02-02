@@ -54,6 +54,23 @@
   border-color: rgba(255, 255, 255, 0.2);
 }
 
+.upcoming-events-item-link {
+  display: flex;
+  flex: 1;
+  gap: 2rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.upcoming-events-item {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.upcoming-events-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
 .upcoming-events-date {
   flex: 0 0 140px;
   display: flex;

@@ -98,30 +98,23 @@ const UpcomingEventsSection = () => {
                     <h3 className="upcoming-events-item-title">{ev.title}</h3>
                     {ev.location && (
                       <p className="upcoming-events-location">
-                        📍 {ev.location}
+                         {ev.location}
                       </p>
                     )}
-                    {ev.description && (
-                      <p className="upcoming-events-description">
-                        {ev.description.length > 150
-                          ? `${ev.description.substring(0, 150)}...`
-                          : ev.description}
-                      </p>
-                    )}
+                    
                   </div>
                 </>
               )
               return (
                 <li key={ev.id} className="upcoming-events-item">
-                  {ev.htmlLink ? (
-                    <a
-                      href={ev.htmlLink}
-                      target="_blank"
-                      rel="noreferrer"
+                  {ev.id ? (
+                    <Link
+                      to={`/events/${encodeURIComponent(ev.id)}`}
+                      state={{ event: ev }}
                       className="upcoming-events-item-link"
                     >
                       {content}
-                    </a>
+                    </Link>
                   ) : (
                     content
                   )}

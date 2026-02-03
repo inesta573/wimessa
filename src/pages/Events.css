@@ -1,0 +1,213 @@
+.events-page {
+  position: relative;
+  z-index: 1;
+}
+
+.events-page-inner {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 5rem 4rem;
+}
+
+.events-page-title {
+  margin: 0 0 1.5rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: white;
+  text-align: center;
+}
+
+.events-page-loading,
+.events-page-error {
+  text-align: center;
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.events-page-error p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.events-calendar-wrapper {
+  height: 500px;
+  min-height: 400px;
+}
+
+/* react-big-calendar overrides for dark theme */
+.events-calendar {
+  --rbc-background: rgba(255, 255, 255, 0.08);
+  --rbc-border: rgba(255, 255, 255, 0.2);
+  --rbc-text: rgba(255, 255, 255, 0.95);
+  --rbc-event-bg: rgba(255, 255, 255, 0.25);
+  --rbc-today-bg: rgba(255, 255, 255, 0.06);
+}
+
+.events-calendar .rbc-calendar {
+  font-family: inherit;
+  color: var(--rbc-text);
+}
+
+.events-calendar .rbc-header {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--rbc-border);
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+}
+
+.events-calendar .rbc-month-view {
+  border: 1px solid var(--rbc-border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--rbc-background);
+}
+
+.events-calendar .rbc-month-row {
+  border-top: 1px solid var(--rbc-border);
+}
+
+.events-calendar .rbc-day-bg {
+  background: transparent;
+}
+
+.events-calendar .rbc-day-bg + .rbc-day-bg {
+  border-left: 1px solid var(--rbc-border);
+}
+
+.events-calendar .rbc-date-cell {
+  padding: 0.25rem 0.5rem;
+  color: rgba(255, 255, 255, 0.85);
+  text-align: right;
+}
+
+.events-calendar .rbc-off-range-bg {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.events-calendar .rbc-today {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.events-calendar .rbc-toolbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  color: white;
+}
+
+.events-calendar .rbc-toolbar button {
+  color: white;
+  border: 1px solid var(--rbc-border);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.4rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.events-calendar .rbc-toolbar button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.events-calendar .rbc-toolbar button:active,
+.events-calendar .rbc-toolbar button.rbc-active {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.events-calendar .rbc-toolbar-label {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  pointer-events: none;
+}
+
+.events-calendar .rbc-toolbar button:first-of-type {
+  order: -1;
+}
+
+.events-calendar .rbc-toolbar button:last-of-type {
+  order: 1;
+}
+
+.events-calendar .rbc-event {
+  background: var(--rbc-event-bg);
+  border: none;
+  border-radius: 4px;
+  padding: 0 0.25rem;
+  color: white;
+}
+
+.events-calendar .rbc-event:focus,
+.events-calendar .rbc-event:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.events-calendar .rbc-show-more {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.85rem;
+}
+
+.events-calendar .rbc-overlay {
+  background: rgba(30, 30, 30, 0.98);
+  border: 1px solid var(--rbc-border);
+  border-radius: 8px;
+}
+
+.events-calendar .rbc-overlay-header {
+  border-bottom: 1px solid var(--rbc-border);
+  color: white;
+}
+
+@media (max-width: 992px) {
+  .events-page-inner {
+    padding: 0 2rem 3rem;
+  }
+
+  .events-page-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .events-page-inner {
+    padding: 0 1.5rem 2.5rem;
+  }
+
+  .events-calendar-wrapper {
+    min-height: 400px;
+  }
+
+  .events-page-title {
+    font-size: 1.4rem;
+  }
+
+  .events-calendar .rbc-toolbar {
+    flex-direction: column;
+  }
+
+  .events-calendar .rbc-toolbar-label {
+    position: static;
+    transform: none;
+    order: -1;
+    width: 100%;
+    margin-bottom: 0.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .events-page-inner {
+    padding: 0 1rem 2rem;
+  }
+
+  .events-page-title {
+    font-size: 1.25rem;
+  }
+}

@@ -59,7 +59,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1.25rem;
+  gap: 3rem;
 }
 
 .maktoub-archive-item {

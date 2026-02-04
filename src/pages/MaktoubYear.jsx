@@ -1,9 +1,17 @@
 import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import FlipBook from '../components/flipbook/flipBook'
 import './MaktoubYear.css'
+
+// Add PDFs here when ready: import the file and add the year to MAKTOUB_PDFS
+// e.g. import maktoub2024 from '../assets/maktoub2024.pdf'
+const MAKTOUB_PDFS = {
+  // 2024: maktoub2024,
+}
 
 const MaktoubYear = () => {
   const { year } = useParams()
+  const file = year ? MAKTOUB_PDFS[year] : null
 
   useEffect(() => {
     document.title = year ? `Maktoub ${year} | WIMESSA` : 'Maktoub | WIMESSA'
@@ -20,9 +28,7 @@ const MaktoubYear = () => {
           Back to Maktoub
         </Link>
         <h1 className="maktoub-year-title">Maktoub {year}</h1>
-        <p className="maktoub-year-intro">
-          This year’s edition. Book content or viewer can be added here.
-        </p>
+        <FlipBook file={file} year={year} />
       </div>
     </main>
   )

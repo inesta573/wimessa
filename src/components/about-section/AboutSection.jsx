@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import './about-section.css'
-import aboutImage from '../../assets/Header_background.jpg'
+import aboutImage from '../../assets/teamImage.jpeg'
 
 const AboutSection = () => {
   return (

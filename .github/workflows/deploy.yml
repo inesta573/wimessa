@@ -23,6 +23,10 @@ jobs:
         run: npm ci
 
       - name: Build
+        env:
+          # Set in repo Secrets (Actions) if your API is on another origin
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_EVENTS_API: ${{ secrets.VITE_EVENTS_API }}
         run: npm run build
 
       - name: Deploy to SiteGround via FTP

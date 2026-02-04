@@ -5,6 +5,7 @@ import About from './pages/About'
 import Events from './pages/Events'
 import EventDetail from './pages/EventDetail'
 import Maktoub from './pages/Maktoub'
+import MaktoubYear from './pages/MaktoubYear'
 import Contact from './pages/Contact'
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
       <Route path="/about" element={<Layout><About /></Layout>} />
       <Route path="/events/:id" element={<Layout><EventDetail /></Layout>} />
       <Route path="/events" element={<Layout><Events /></Layout>} />
+      <Route path="/maktoub/:year" element={<Layout><MaktoubYear /></Layout>} />
       <Route path="/maktoub" element={<Layout><Maktoub /></Layout>} />
       <Route path="/contact" element={<Layout><Contact /></Layout>} />
     </Routes>

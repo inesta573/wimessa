@@ -8,6 +8,7 @@
   margin-left: auto;
   margin-right: auto;
   padding: 0 5rem 4rem;
+  text-align: center;
 }
 
 .event-detail-loading,
@@ -46,12 +47,13 @@
 }
 
 .event-detail-meta {
-  margin: 0 0 1.5rem;
-  display: grid;
+  margin: 0 auto 1.5rem;
+  display: inline-grid;
   grid-template-columns: auto 1fr;
   gap: 0.25rem 1.5rem;
   color: rgba(255, 255, 255, 0.9);
   font-size: 1rem;
+  text-align: left;
 }
 
 .event-detail-meta dt {

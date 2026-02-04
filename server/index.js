@@ -219,20 +219,27 @@ app.post('/api/contact', async (req, res) => {
 
   const fromAddress = process.env.SMTP_FROM || process.env.SMTP_USER || 'noreply@localhost'
   const fromDisplayName = `Contact form: ${name}`
+  const sendPromise = transporter.sendMail({
+    from: { name: fromDisplayName, address: fromAddress },
+    to: contactEmail,
+    replyTo: { name: name, address: email },
+    subject: mailSubject,
+    text,
+    html,
+  })
+  const timeoutMs = 15000
+  const timeoutPromise = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error('Email send timeout')), timeoutMs)
+  )
   try {
-    await transporter.sendMail({
-      from: { name: fromDisplayName, address: fromAddress },
-      to: contactEmail,
-      replyTo: { name: name, address: email },
-      subject: mailSubject,
-      text,
-      html,
-    })
+    await Promise.race([sendPromise, timeoutPromise])
     return res.status(200).json({ message: 'Message sent successfully.' })
   } catch (err) {
     console.error('Contact form send error:', err.message)
     return res.status(500).json({
-      error: 'Failed to send message. Please try again later.',
+      error: err.message === 'Email send timeout'
+        ? 'Request timed out. Please try again.'
+        : 'Failed to send message. Please try again later.',
     })
   }
 })

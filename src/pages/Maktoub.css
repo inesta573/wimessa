@@ -1,0 +1,157 @@
+.maktoub-page {
+  position: relative;
+  z-index: 1;
+}
+
+.maktoub-about-inner,
+.maktoub-archive-inner {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 5rem 4rem;
+  text-align: center;
+}
+
+.maktoub-about {
+  padding-top: 7rem;
+  padding-bottom: 2rem;
+}
+
+.maktoub-title {
+  margin: 1rem;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: white;
+}
+
+.maktoub-about-heading {
+  margin: 3rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.maktoub-about-text {
+  margin: 0 auto;
+  max-width: 720px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+}
+
+.maktoub-archive {
+  padding-top: 2rem;
+  padding-bottom: 5rem;
+}
+
+.maktoub-archive-title {
+  margin: 0 0 2rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+}
+
+.maktoub-archive-grid {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.maktoub-archive-item {
+  margin: 0;
+}
+
+.maktoub-archive-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  min-height: 140px;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 600;
+  transition: background 0.2s ease, transform 0.15s ease;
+  box-sizing: border-box;
+}
+
+.maktoub-archive-link:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-2px);
+}
+
+.maktoub-archive-year {
+  display: block;
+}
+
+@media (max-width: 992px) {
+  .maktoub-about-inner,
+  .maktoub-archive-inner {
+    padding: 0 2rem 3rem;
+  }
+
+  .maktoub-title {
+    font-size: 1.75rem;
+  }
+
+  .maktoub-archive-link {
+    width: 140px;
+  }
+}
+
+@media (max-width: 768px) {
+  .maktoub-about-inner,
+  .maktoub-archive-inner {
+    padding: 0 1.5rem 2.5rem;
+  }
+
+  .maktoub-about {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .maktoub-archive {
+    padding-top: 1.5rem;
+    padding-bottom: 4rem;
+  }
+
+  .maktoub-about-heading,
+  .maktoub-archive-title {
+    font-size: 1.35rem;
+  }
+
+  .maktoub-archive-title {
+    margin-bottom: 1.5rem;
+  }
+
+  .maktoub-archive-grid {
+    gap: 1rem;
+  }
+
+  .maktoub-archive-link {
+    width: 140px;
+    min-height: 120px;
+    font-size: 1.35rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .maktoub-about-inner,
+  .maktoub-archive-inner {
+    padding: 0 1rem 2rem;
+  }
+
+  .maktoub-archive-link {
+    width: 120px;
+    min-height: 100px;
+    font-size: 1.25rem;
+  }
+}

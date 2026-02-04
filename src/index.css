@@ -19,3 +19,7 @@ body {
   min-height: 100%;
   position: relative;
 }
+
+.page {
+  text-align: center;
+}

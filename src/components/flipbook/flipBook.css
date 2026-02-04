@@ -1,0 +1,70 @@
+.flipbook-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 1.5rem 1rem;
+  min-height: min(90vh, 600px);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.flipbook-sizer {
+  margin: 0 auto;
+  transition: width 0.35s ease;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* When closed: view is full book width, shifted left so only right half (cover) is visible */
+.flipbook-view {
+  --flipbook-page-width: 380px;
+  transition: transform 0.35s ease;
+}
+
+.flipbook-sizer--cover .flipbook-view {
+  transform: translateX(calc(-1 * var(--flipbook-page-width)));
+}
+
+
+.flipbook {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.flipbook-page {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.flipbook-page .react-pdf__Page {
+  display: block;
+}
+
+.flipbook-page .react-pdf__Page__canvas {
+  display: block;
+  max-width: 100%;
+  height: auto !important;
+}
+
+.flipbook-message {
+  text-align: center;
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+}
+
+.flipbook-coming-soon p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.flipbook-message p {
+  margin: 0;
+}
+
+.flipbook-error p {
+  color: #f88;
+}

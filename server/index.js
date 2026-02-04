@@ -30,7 +30,16 @@ app.get('/', (req, res) => {
     message: 'WIMESSA Events API',
     endpoint: '/api/events',
     usage: 'GET /api/events?limit=10',
+    contact: 'POST /api/contact',
   })
+})
+
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'ok' })
+})
+
+app.get('/api/contact', (req, res) => {
+  res.status(405).json({ error: 'Method not allowed. Use POST to submit the contact form.' })
 })
 
 app.get('/api/events', async (req, res) => {

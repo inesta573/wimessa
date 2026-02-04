@@ -33,6 +33,17 @@
   line-height: 1.3;
 }
 
+.maktoub-year-loading,
+.maktoub-year-error {
+  margin: 0 0 1.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+}
+
+.maktoub-year-error {
+  color: #f88;
+}
+
 .maktoub-year-intro {
   margin: 0 0 2rem;
   color: rgba(255, 255, 255, 0.9);

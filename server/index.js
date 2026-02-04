@@ -1,19 +1,29 @@
 /**
  * Express API: fetches public Google Calendar iCal feed,
  * parses ICS, returns upcoming events as JSON.
- * Set GOOGLE_CALENDAR_ICAL_URL in .env or environment.
+ * Contact form: POST /api/contact sends email to CONTACT_EMAIL.
+ * Set GOOGLE_CALENDAR_ICAL_URL, CONTACT_EMAIL, and SMTP/Resend in .env.
  * Run: node server/index.js (or npm run server)
  */
 import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import ical from 'node-ical'
+import nodemailer from 'nodemailer'
 
 const app = express()
 const PORT = process.env.PORT || 3001
 const DEFAULT_LIMIT = 10
 
+const MAX_NAME = 200
+const MAX_EMAIL = 254
+const MAX_SUBJECT = 300
+const MAX_MESSAGE = 5000
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 app.use(cors())
+app.use(express.json())
 
 app.get('/', (req, res) => {
   res.json({
@@ -87,6 +97,142 @@ app.get('/api/events', async (req, res) => {
     return res.status(500).json({
       error: 'Failed to load calendar',
       events: [],
+    })
+  }
+})
+
+function createMailTransporter() {
+  const resendKey = process.env.RESEND_API_KEY?.trim()
+  if (resendKey) {
+    return nodemailer.createTransport({
+      host: process.env.SMTP_HOST || 'smtp.resend.com',
+      port: Number(process.env.SMTP_PORT) || 465,
+      secure: true,
+      auth: {
+        user: 'resend',
+        pass: resendKey,
+      },
+    })
+  }
+  const user = process.env.SMTP_USER?.trim()
+  const pass = process.env.SMTP_PASS?.trim()
+  if (!user || !pass) return null
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: Number(process.env.SMTP_PORT) || 465,
+    secure: true,
+    auth: { user, pass },
+  })
+}
+
+app.post('/api/contact', async (req, res) => {
+  const contactEmail = process.env.CONTACT_EMAIL?.trim()
+  if (!contactEmail) {
+    return res.status(503).json({
+      error: 'Contact form is not configured. Set CONTACT_EMAIL on the server.',
+    })
+  }
+
+  let name = req.body?.name != null ? String(req.body.name).trim() : ''
+  let email = req.body?.email != null ? String(req.body.email).trim() : ''
+  let subject = req.body?.subject != null ? String(req.body.subject).trim() : ''
+  let message = req.body?.message != null ? String(req.body.message).trim() : ''
+
+  if (!name) {
+    return res.status(400).json({ error: 'Name is required.' })
+  }
+  if (name.length > MAX_NAME) {
+    return res.status(400).json({ error: `Name must be at most ${MAX_NAME} characters.` })
+  }
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required.' })
+  }
+  if (!emailRegex.test(email) || email.length > MAX_EMAIL) {
+    return res.status(400).json({ error: 'Please provide a valid email address.' })
+  }
+  if (subject.length > MAX_SUBJECT) {
+    return res.status(400).json({ error: `Subject must be at most ${MAX_SUBJECT} characters.` })
+  }
+  if (!message) {
+    return res.status(400).json({ error: 'Message is required.' })
+  }
+  if (message.length > MAX_MESSAGE) {
+    return res.status(400).json({ error: `Message must be at most ${MAX_MESSAGE} characters.` })
+  }
+
+  const transporter = createMailTransporter()
+  if (!transporter) {
+    return res.status(503).json({
+      error: 'Email is not configured. Set SMTP_USER/SMTP_PASS or RESEND_API_KEY on the server.',
+    })
+  }
+
+  const mailSubject = subject ? `[Contact Form] ${subject}` : `[Contact Form] Message from ${name}`
+
+  const text = [
+    '════════════════════════════════════════',
+    '  WIMESSA WEBSITE — NEW INQUIRY',
+    '════════════════════════════════════════',
+    '',
+    'FROM',
+    '  Name:   ' + name,
+    '  Email:  ' + email,
+    subject ? '  Subject: ' + subject : '',
+    subject ? '' : null,
+    '────────────────────────────────────────',
+    'MESSAGE',
+    '────────────────────────────────────────',
+    '',
+    message,
+    '',
+    '────────────────────────────────────────',
+    'Reply to this email to respond to the sender.',
+    '════════════════════════════════════════',
+  ].filter(Boolean).join('\n')
+
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/\n/g, '<br>')
+  }
+
+  const html = [
+    '<div style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif; max-width: 560px; color: #333;">',
+    '<div style="background: #2d3748; color: #fff; padding: 1rem 1.25rem; border-radius: 8px 8px 0 0; font-weight: 600; font-size: 1rem;">WIMESSA Website — New inquiry</div>',
+    '<div style="border: 1px solid #e2e8f0; border-top: none; padding: 1.25rem 1.5rem; border-radius: 0 0 8px 8px;">',
+    '<table style="border-collapse: collapse; width: 100%; font-size: 0.95rem;">',
+    '<tr><td style="padding: 0.35em 0.75em 0.35em 0; color: #64748b; font-weight: 600; width: 80px;">From</td><td style="padding: 0.35em 0;">' + escapeHtml(name) + '</td></tr>',
+    '<tr><td style="padding: 0.35em 0.75em 0.35em 0; color: #64748b; font-weight: 600;">Email</td><td style="padding: 0.35em 0;"><a href="mailto:' + escapeHtml(email) + '" style="color: #2563eb;">' + escapeHtml(email) + '</a></td></tr>',
+    subject ? '<tr><td style="padding: 0.35em 0.75em 0.35em 0; color: #64748b; font-weight: 600;">Subject</td><td style="padding: 0.35em 0;">' + escapeHtml(subject) + '</td></tr>' : '',
+    '</table>',
+    '<div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">',
+    '<div style="color: #64748b; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.5rem;">Message</div>',
+    '<div style="padding: 1rem; background: #f8fafc; border-left: 4px solid #2d3748; border-radius: 4px; white-space: pre-wrap; line-height: 1.5;">' + escapeHtml(message) + '</div>',
+    '</div>',
+    '<p style="margin-top: 1.25rem; font-size: 0.8rem; color: #94a3b8;">Reply to this email to respond to the sender.</p>',
+    '</div>',
+    '</div>',
+  ].filter(Boolean).join('')
+
+  const fromAddress = process.env.SMTP_FROM || process.env.SMTP_USER || 'noreply@localhost'
+  const fromDisplayName = `Contact form: ${name}`
+  try {
+    await transporter.sendMail({
+      from: { name: fromDisplayName, address: fromAddress },
+      to: contactEmail,
+      replyTo: { name: name, address: email },
+      subject: mailSubject,
+      text,
+      html,
+    })
+    return res.status(200).json({ message: 'Message sent successfully.' })
+  } catch (err) {
+    console.error('Contact form send error:', err.message)
+    return res.status(500).json({
+      error: 'Failed to send message. Please try again later.',
     })
   }
 })

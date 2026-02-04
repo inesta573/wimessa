@@ -126,6 +126,12 @@ function createMailTransporter() {
 }
 
 app.post('/api/contact', async (req, res) => {
+  res.setTimeout(20000, () => {
+    if (!res.headersSent) {
+      res.status(504).json({ error: 'Request timed out. Please try again.' })
+    }
+  })
+
   const contactEmail = process.env.CONTACT_EMAIL?.trim()
   if (!contactEmail) {
     return res.status(503).json({
@@ -160,8 +166,9 @@ app.post('/api/contact', async (req, res) => {
     return res.status(400).json({ error: `Message must be at most ${MAX_MESSAGE} characters.` })
   }
 
-  const transporter = createMailTransporter()
-  if (!transporter) {
+  const resendKey = process.env.RESEND_API_KEY?.trim()
+  const transporter = !resendKey ? createMailTransporter() : null
+  if (!resendKey && !transporter) {
     return res.status(503).json({
       error: 'Email is not configured. Set SMTP_USER/SMTP_PASS or RESEND_API_KEY on the server.',
     })
@@ -219,20 +226,47 @@ app.post('/api/contact', async (req, res) => {
 
   const fromAddress = process.env.SMTP_FROM || process.env.SMTP_USER || 'noreply@localhost'
   const fromDisplayName = `Contact form: ${name}`
-  const sendPromise = transporter.sendMail({
-    from: { name: fromDisplayName, address: fromAddress },
-    to: contactEmail,
-    replyTo: { name: name, address: email },
-    subject: mailSubject,
-    text,
-    html,
-  })
+
   const timeoutMs = 15000
   const timeoutPromise = new Promise((_, reject) =>
     setTimeout(() => reject(new Error('Email send timeout')), timeoutMs)
   )
+
   try {
-    await Promise.race([sendPromise, timeoutPromise])
+    if (resendKey) {
+      const fromHeader = `${fromDisplayName} <${fromAddress}>`
+      const resendPromise = fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${resendKey}`,
+        },
+        body: JSON.stringify({
+          from: fromHeader,
+          to: [contactEmail],
+          reply_to: email,
+          subject: mailSubject,
+          text,
+          html,
+        }),
+      })
+      const res = await Promise.race([resendPromise, timeoutPromise])
+      if (!res.ok) {
+        const errBody = await res.text()
+        console.error('Contact form send error (Resend API):', res.status, errBody)
+        throw new Error(res.status === 429 ? 'Rate limited' : `Resend API ${res.status}`)
+      }
+    } else {
+      const sendPromise = transporter.sendMail({
+        from: { name: fromDisplayName, address: fromAddress },
+        to: contactEmail,
+        replyTo: { name: name, address: email },
+        subject: mailSubject,
+        text,
+        html,
+      })
+      await Promise.race([sendPromise, timeoutPromise])
+    }
     return res.status(200).json({ message: 'Message sent successfully.' })
   } catch (err) {
     console.error('Contact form send error:', err.message)

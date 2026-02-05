@@ -3,20 +3,15 @@ import { Link } from 'react-router-dom'
 import './upcoming-events.css'
 
 function formatEventDate(start, end) {
-  try {
-    const s = new Date(start)
-    const e = new Date(end)
-    if (Number.isNaN(s.getTime()) || Number.isNaN(e.getTime())) return ''
-    const date = s.toLocaleDateString(undefined, {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-    })
-    const time = `${s.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })} – ${e.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}`
-    return `${date} • ${time}`
-  } catch {
-    return ''
-  }
+  const s = new Date(start)
+  const e = new Date(end)
+  const date = s.toLocaleDateString(undefined, {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+  })
+  const time = `${s.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })} – ${e.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}`
+  return `${date} • ${time}`
 }
 
 const UpcomingEventsSection = () => {
@@ -95,14 +90,11 @@ const UpcomingEventsSection = () => {
                       {ev.start && ev.end
                         ? formatEventDate(ev.start, ev.end)
                         : ev.start
-                          ? (() => {
-                              try {
-                                const d = new Date(ev.start)
-                                return Number.isNaN(d.getTime()) ? '' : d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
-                              } catch {
-                                return ''
-                              }
-                            })()
+                          ? new Date(ev.start).toLocaleDateString(undefined, {
+                              weekday: 'short',
+                              month: 'short',
+                              day: 'numeric',
+                            })
                           : ''}
                     </span>
                   </div>

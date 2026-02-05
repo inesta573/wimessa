@@ -30,7 +30,6 @@ jobs:
         run: npm run build
 
       - name: Create contact config
-        if: secrets.CONTACT_EMAIL != ''
         env:
           CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
         run: node scripts/create-contact-config.js

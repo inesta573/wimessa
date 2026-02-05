@@ -29,9 +29,11 @@ const Contact = () => {
     }
 
     setLoading(true)
+    // Use contact.php on SiteGround (same origin); VITE_API_URL only for external API
     const apiBase = import.meta.env.VITE_API_URL || ''
+    const contactUrl = apiBase ? `${apiBase}/api/contact` : '/contact.php'
     try {
-      const res = await fetch(`${apiBase}/api/contact`, {
+      const res = await fetch(contactUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -15,6 +15,7 @@ dist-ssr
 .env
 .env.development
 .env.production
+contact-config.php
 
 # Editor directories and files
 .vscode/*

@@ -3,15 +3,20 @@ import { Link } from 'react-router-dom'
 import './upcoming-events.css'
 
 function formatEventDate(start, end) {
-  const s = new Date(start)
-  const e = new Date(end)
-  const date = s.toLocaleDateString(undefined, {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-  })
-  const time = `${s.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })} – ${e.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}`
-  return `${date} • ${time}`
+  try {
+    const s = new Date(start)
+    const e = new Date(end)
+    if (Number.isNaN(s.getTime()) || Number.isNaN(e.getTime())) return ''
+    const date = s.toLocaleDateString(undefined, {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+    })
+    const time = `${s.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })} – ${e.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}`
+    return `${date} • ${time}`
+  } catch {
+    return ''
+  }
 }
 
 const UpcomingEventsSection = () => {
@@ -35,7 +40,11 @@ const UpcomingEventsSection = () => {
         return r.json()
       })
       .then((data) => {
-        const items = Array.isArray(data.items) ? data.items : []
+        const items = Array.isArray(data?.events)
+          ? data.events
+          : Array.isArray(data?.items)
+            ? data.items
+            : []
   
         const upcomingTwo = items
           .filter((e) => e && e.id && e.title && e.start)
@@ -86,11 +95,14 @@ const UpcomingEventsSection = () => {
                       {ev.start && ev.end
                         ? formatEventDate(ev.start, ev.end)
                         : ev.start
-                          ? new Date(ev.start).toLocaleDateString(undefined, {
-                              weekday: 'short',
-                              month: 'short',
-                              day: 'numeric',
-                            })
+                          ? (() => {
+                              try {
+                                const d = new Date(ev.start)
+                                return Number.isNaN(d.getTime()) ? '' : d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
+                              } catch {
+                                return ''
+                              }
+                            })()
                           : ''}
                     </span>
                   </div>

@@ -24,7 +24,10 @@ jobs:
 
       - name: Build
         env:
-          # Set in repo Secrets (Actions) if your API is on another origin
+          # Supabase contact form
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          # Events API (optional)
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_EVENTS_API: ${{ secrets.VITE_EVENTS_API }}
         run: npm run build
@@ -41,5 +44,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
-          server-dir: public_html/
+          server-dir: wimessa.ca/public_html/
           dangerous-clean-slate: true

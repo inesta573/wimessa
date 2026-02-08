@@ -29,13 +29,18 @@ const Contact = () => {
     }
 
     setLoading(true)
-    // Use contact.php on SiteGround (same origin); VITE_API_URL only for external API
-    const apiBase = import.meta.env.VITE_API_URL || ''
-    const contactUrl = apiBase ? `${apiBase}/api/contact` : '/contact.php'
+    // Supabase Edge Function (if configured) or fallback to PHP
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+    const contactUrl = supabaseUrl && supabaseAnonKey
+      ? `${supabaseUrl}/functions/v1/contact`
+      : (import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/contact` : '/contact.php')
     try {
+      const headers = { 'Content-Type': 'application/json' }
+      if (supabaseAnonKey) headers['Authorization'] = `Bearer ${supabaseAnonKey}`
       const res = await fetch(contactUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           name: name.trim(),
           email: email.trim(),

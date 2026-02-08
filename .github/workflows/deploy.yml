@@ -32,11 +32,6 @@ jobs:
           VITE_EVENTS_API: ${{ secrets.VITE_EVENTS_API }}
         run: npm run build
 
-      - name: Create contact config
-        env:
-          CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
-        run: node scripts/create-contact-config.js
-
       - name: Deploy to SiteGround via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:

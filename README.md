@@ -1,6 +1,6 @@
 # WIMESSA Website
 
-React + Vite frontend with an Express API for events (Google Calendar) and contact form email.
+React + Vite frontend with Supabase for the contact form and an optional Express API for events (Google Calendar).
 
 ---
 
@@ -15,8 +15,8 @@ React + Vite frontend with an Express API for events (Google Calendar) and conta
 Create your own `.env` by copying [.env.example](.env.example). Fill in your own values (Resend API key, Gmail App Password, contact email, etc.). **Do not commit `.env`** or paste real keys into any file that gets committed.
 - **What belongs where:**  
   - **Local development:** Put secrets only in `.env` (or `.env.development`) on your machine.  
-  - **Production frontend (e.g. GitHub Actions):** Use **Settings → Secrets and variables → Actions** for `VITE_API_URL`, `VITE_EVENTS_API`.  
-  - **Production backend (e.g. Render):** Use the host’s **Environment** / **Variables** for `CONTACT_EMAIL`, `RESEND_API_KEY`, `SMTP_FROM`, `GOOGLE_CALENDAR_ICAL_URL`, etc.
+  - **Production frontend (e.g. GitHub Actions):** Use **Settings → Secrets and variables → Actions** for `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_API_URL`, `VITE_EVENTS_API`.  
+  - **Production backend (e.g. Render):** Use the host’s **Environment** / **Variables** for `GOOGLE_CALENDAR_ICAL_URL` etc. if you run the Node API. Contact form uses Supabase (set secrets in Supabase Dashboard).
 - **If you ever commit a secret:** Rotate it immediately (new API key, new password) and remove the secret from git history (e.g. `git filter-branch` or BFG Repo-Cleaner). Consider the old value compromised.
 
 ---
@@ -39,30 +39,13 @@ Edit `.env` and add your own values (see [Environment variables](#environment-va
 
 ## How to test the contact form
 
-1. **Set up `.env`** in the project root with at least:
-  - `CONTACT_EMAIL` = your email (where you want to receive test messages)
-  - Gmail: `SMTP_USER` (your Gmail), `SMTP_PASS` (App Password), or  
-  - Resend: `RESEND_API_KEY` (and `SMTP_FROM` if required)
-2. **Start the backend** (in one terminal):
-  ```bash
-   npm run server
-  ```
-   You should see: `Events API running at http://localhost:3001`
-3. **Start the frontend** (in another terminal):
-  ```bash
-   npm run dev
-  ```
-   Open the URL shown (e.g. [http://localhost:5173](http://localhost:5173)).
-4. **Test in the browser**: Go to **Contact**, fill in name, email, and message, click **Send message**. You should see a success message and receive an email at `CONTACT_EMAIL`.
-5. **Test the API directly** (optional):
-  ```bash
-   curl -X POST http://localhost:3001/api/contact \
-     -H "Content-Type: application/json" \
-     -d '{"name":"Test","email":"you@example.com","subject":"Hi","message":"Test message"}'
-  ```
-   Expect `{"message":"Message sent successfully."}` or an error JSON.
+The contact form uses **Supabase** (Edge Function + Resend). See [SUPABASE_CONTACT_SETUP.md](SUPABASE_CONTACT_SETUP.md) for setup.
 
-If the form says "Contact form is not configured" or "Email is not configured", check that `CONTACT_EMAIL` and either Gmail or Resend credentials are set in `.env`.
+1. **Set up `.env`** with `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (from Supabase Dashboard → Settings → API).
+2. **Start the frontend**: `npm run dev`, then open the URL (e.g. [http://localhost:5173](http://localhost:5173)).
+3. Go to **Contact**, fill in the form, and submit. You should see a success message; submissions are stored in Supabase and an email is sent via Resend (if configured).
+
+If the form says "Contact form is not configured", ensure `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are set in `.env` and in GitHub Actions secrets for production.
 
 ## Environment variables
 
@@ -89,30 +72,15 @@ Production config and secrets are **not in the repo**. Set them in your hosting 
 ### Frontend (this repo deploys `dist/` to SiteGround via GitHub Actions)
 
 - **Build-time env vars:** In GitHub go to **Settings → Secrets and variables → Actions**. Add repository secrets (do not put these in any file in the repo):
-  - `VITE_API_URL` — production API base URL (e.g. `https://wimessa-api.onrender.com`).
-  - `VITE_EVENTS_API` — production events API URL if different (e.g. your Cloudflare Worker URL).
-- The [deploy workflow](.github/workflows/deploy.yml) passes these into `npm run build`. The built site then calls your production APIs.
+  - `VITE_SUPABASE_URL` — Supabase project URL (contact form).
+  - `VITE_SUPABASE_ANON_KEY` — Supabase anon key (contact form).
+  - `VITE_EVENTS_API` — production events API URL if you use a separate API for events.
+  - `VITE_API_URL` — optional; production Node API base URL if you run the Express server.
+- The [deploy workflow](.github/workflows/deploy.yml) passes these into `npm run build`. The built site uses Supabase for the contact form.
 
-### Backend (Express API – contact form + events)
+### Optional: Node API (events only)
 
-The Express server is not deployed by the current workflow. Run it on a host (e.g. Render) and set env vars **only in that host’s dashboard** — never in the repo.
-
-**Step-by-step for Render:** see **[docs/DEPLOY_RENDER.md](docs/DEPLOY_RENDER.md)**.
-
-- **CONTACT_EMAIL** – address that receives contact form submissions.
-- **SMTP** (Gmail): **SMTP_USER**, **SMTP_PASS** (App Password).  
-- **Or Resend**: **RESEND_API_KEY**; optionally **SMTP_FROM**, **SMTP_HOST**, **SMTP_PORT**.
-- **Events**: **GOOGLE_CALENDAR_ICAL_URL** for the events API.
-
-Set these **only** in the backend host environment (never in the repo):
-
-- **Render, Railway, Fly.io, Heroku:** Project dashboard → your service → **Environment** / **Variables** / **Secrets**.
-- **SiteGround (Node/SSH):** `.env` on the server or control panel environment variables.
-- **Your own VPS:** `.env` in the app directory (do not add to git) or systemd/env config.
-
-
-Then add the **VITE_API_URL** secret in GitHub Actions (see Frontend above) so the built site calls your backend URL.
-
+The Express server is not deployed by the current workflow. If you run it (e.g. on Render) for the events API, set **GOOGLE_CALENDAR_ICAL_URL** and other vars in that host's dashboard. See **docs/DEPLOY_RENDER.md** if it exists.
 ---
 
 ## React + Vite (template notes)

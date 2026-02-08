@@ -29,12 +29,17 @@ const Contact = () => {
     }
 
     setLoading(true)
-    // Supabase Edge Function (if configured) or fallback to PHP
+    // Supabase Edge Function (if configured) or Node API fallback
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
     const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
     const contactUrl = supabaseUrl && supabaseAnonKey
       ? `${supabaseUrl}/functions/v1/contact`
-      : (import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/contact` : '/contact.php')
+      : (import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/contact` : null)
+    if (!contactUrl) {
+      setFeedback({ type: 'error', text: 'Contact form is not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.' })
+      setLoading(false)
+      return
+    }
     try {
       const headers = { 'Content-Type': 'application/json' }
       if (supabaseAnonKey) headers['Authorization'] = `Bearer ${supabaseAnonKey}`

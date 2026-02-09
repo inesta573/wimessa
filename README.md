@@ -8,19 +8,20 @@ React + Vite frontend for WIMESSA (Women in Islamic and Middle Eastern Studies i
 
 | Page | Route | Description |
 |------|-------|-------------|
-| Home | `/` | Hero, About section, Upcoming Events |
-| About | `/about` | About WIMESSA, mission, team |
-| Events | `/events` | Calendar view (react-big-calendar) of upcoming events |
-| Event Detail | `/events/:id` | Individual event page with date, time, location, description |
-| Maktoub | `/maktoub` | Annual publication archive (years 2022–2024) |
-| Maktoub Year | `/maktoub/:year` | PDF flipbook viewer for a given year |
-| Contact | `/contact` | Contact form (Supabase or Node API) |
+| Home | `/:locale` (e.g. `/en`, `/fr`) | Hero, About section, Upcoming Events |
+| About | `/:locale/about` | About WIMESSA, mission, team |
+| Events | `/:locale/events` | Calendar view (react-big-calendar) of upcoming events |
+| Event Detail | `/:locale/events/:id` | Individual event page with date, time, location, description |
+| Maktoub | `/:locale/maktoub` | Annual publication archive (years 2022–2024) |
+| Maktoub Year | `/:locale/maktoub/:year` | PDF flipbook viewer for a given year |
+| Contact | `/:locale/contact` | Contact form (Supabase or Node API) |
 
 ---
 
 ## Tech stack
 
 - **Frontend:** React 19, Vite 7, react-router-dom
+- **i18n:** react-i18next — English, French, and Arabic with URL-prefixed routes (`/en/...`, `/fr/...`, `/ar/...`). Arabic uses RTL layout.
 - **Contact form:** Supabase Edge Function + Resend (or optional Node API fallback)
 - **Events:** Optional Express API parsing Google Calendar iCal; `useEvents` hook; react-big-calendar, date-fns
 - **Maktoub:** react-pageflip, react-pdf for PDF flipbook viewer
@@ -175,6 +176,16 @@ The Express server is not deployed by the workflow. If you run it (e.g. on Rende
 
 ---
 
+## Internationalization (i18n)
+
+The site supports **English**, **French**, and **Arabic** via URL-prefixed routes (`/en/about`, `/fr/contact`, `/ar/contact`). Visiting `/` redirects to `/en`, `/fr`, or `/ar` based on browser language. Arabic enables RTL (right-to-left) layout automatically.
+
+- **Language switcher:** EN | FR | عربي in the navbar
+- **Translation files:** `src/locales/en.json`, `src/locales/fr.json`, `src/locales/ar.json`
+- **To add a language:** Create `src/locales/xx.json`, add `xx` to `SUPPORTED_LOCALES` in `src/i18n.js`, add it to the language switcher in the navbar
+
+---
+
 ## Project structure
 
 ```
@@ -184,9 +195,12 @@ The Express server is not deployed by the workflow. If you run it (e.g. on Rende
 │   └── index.js           # Express API: /api/events, /api/contact
 ├── src/
 │   ├── assets/            # Images, logos
-│   ├── components/        # Hero, AboutSection, FlipBook, Navbar, etc.
+│   ├── components/        # Hero, AboutSection, FlipBook, LocaleLink, Navbar, etc.
 │   ├── hooks/
-│   │   └── useEvents.js   # Fetches and normalizes events from VITE_EVENTS_API
+│   │   ├── useEvents.js   # Fetches and normalizes events from VITE_EVENTS_API
+│   │   └── useLocale.js   # Current locale and switchLocale for language switcher
+│   ├── i18n.js            # react-i18next config
+│   ├── locales/           # en.json, fr.json translation files
 │   ├── pages/             # Home, About, Events, EventDetail, Maktoub, MaktoubYear, Contact
 │   ├── App.jsx
 │   └── main.jsx

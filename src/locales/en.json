@@ -1,0 +1,95 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "events": "Events",
+    "maktoub": "Maktoub",
+    "contact": "Contact",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "hero": {
+    "title": "WIMESSA",
+    "subtitle": "World Islamic and Middle Eastern Studies Student Association"
+  },
+  "aboutSection": {
+    "title": "About WIMESSA",
+    "text": "The World Islamic and Middle Eastern Studies Student Association brings together students and scholars interested in Islamic and Middle Eastern studies. Learn more about our mission, history, and community.",
+    "button": "Learn more",
+    "imageAlt": "About WIMESSA"
+  },
+  "mission": {
+    "title": "Our Mission",
+    "text": "WIMESSA brings together students and scholars interested in Islamic and Middle Eastern studies to foster dialogue, support research, and build an inclusive community on campus and beyond."
+  },
+  "team": {
+    "title": "Our Team",
+    "coPresident": "Co-President",
+    "vpInternal": "VP Internal",
+    "vpExternal": "VP External",
+    "vpFinance": "VP Finance",
+    "vpEvents": "VP Events",
+    "vpInternships": "VP Internships & Exchanges",
+    "vpAcademics": "VP Academics"
+  },
+  "joinUs": {
+    "title": "Join us",
+    "text": "Interested in Islamic and Middle Eastern studies? Get in touch to join WIMESSA, hear about events, or learn how you can get involved.",
+    "button": "Contact us"
+  },
+  "events": {
+    "title": "Events",
+    "upcoming": "Upcoming Events",
+    "loading": "Loading events...",
+    "loadingEvent": "Loading event...",
+    "loadError": "Unable to load events at this time.",
+    "empty": "No upcoming events scheduled.",
+    "viewAll": "View all events",
+    "backToEvents": "Back to events",
+    "notFound": "Event not found.",
+    "date": "Date",
+    "time": "Time",
+    "location": "Location",
+    "description": "Description",
+    "locationLabel": "Location: {{location}}"
+  },
+  "contact": {
+    "title": "Contact",
+    "intro": "Send us a message and we'll get back to you.",
+    "name": "Name",
+    "email": "Email",
+    "subject": "Subject",
+    "message": "Message",
+    "required": "*",
+    "submit": "Send message",
+    "sending": "Sending…",
+    "validateName": "Please enter your name.",
+    "validateEmail": "Please enter your email.",
+    "validateEmailValid": "Please enter a valid email address.",
+    "validateMessage": "Please enter a message.",
+    "errorGeneric": "Something went wrong. Please try again.",
+    "errorConnection": "Unable to send. Please check your connection and try again.",
+    "errorNotConfigured": "Contact form is not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.",
+    "success": "Message sent successfully."
+  },
+  "maktoub": {
+    "title": "Maktoub",
+    "aboutTitle": "About Maktoub",
+    "aboutText": "Maktoub is WIMESSA's annual publication. It is a collection of essays, art, and reflections from our community. Each edition captures a year of ideas and voices in Islamic and Middle Eastern studies.",
+    "archive": "Archive",
+    "backToMaktoub": "Back to Maktoub",
+    "yearTitle": "Maktoub {{year}}",
+    "comingSoon": "Maktoub {{year}} edition is coming soon.",
+    "comingSoonGeneric": "This Maktoub edition is coming soon.",
+    "metaDescription": "Maktoub is WIMESSA's annual publication—a collection of essays, art, and reflections from our community in Islamic and Middle Eastern studies. Browse the archive by year.",
+    "metaDescriptionYear": "Read Maktoub {{year}} – WIMESSA's annual publication for {{year}}. Essays, art, and reflections from the Islamic and Middle Eastern studies community."
+  },
+  "flipbook": {
+    "loading": "Loading…",
+    "loadError": "Could not load the PDF."
+  },
+  "common": {
+    "defaultTitle": "WIMESSA",
+    "defaultDescription": "WIMESSA – World Islamic and Middle Eastern Studies Student Association. Explore our community, events, and annual publication Maktoub."
+  }
+}

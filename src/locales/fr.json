@@ -1,0 +1,95 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "events": "Événements",
+    "maktoub": "Maktoub",
+    "contact": "Contact",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
+  },
+  "hero": {
+    "title": "WIMESSA",
+    "subtitle": "Association étudiante mondiale des études islamiques et moyen-orientales"
+  },
+  "aboutSection": {
+    "title": "À propos de WIMESSA",
+    "text": "L'Association étudiante mondiale des études islamiques et moyen-orientales réunit des étudiants et des chercheurs intéressés par les études islamiques et moyen-orientales. Découvrez notre mission, notre histoire et notre communauté.",
+    "button": "En savoir plus",
+    "imageAlt": "À propos de WIMESSA"
+  },
+  "mission": {
+    "title": "Notre mission",
+    "text": "WIMESSA rassemble des étudiants et des chercheurs intéressés par les études islamiques et moyen-orientales pour favoriser le dialogue, soutenir la recherche et bâtir une communauté inclusive sur le campus et au-delà."
+  },
+  "team": {
+    "title": "Notre équipe",
+    "coPresident": "Co-présidente",
+    "vpInternal": "VP Interne",
+    "vpExternal": "VP Externe",
+    "vpFinance": "VP Finances",
+    "vpEvents": "VP Événements",
+    "vpInternships": "VP Stages et échanges",
+    "vpAcademics": "VP Académique"
+  },
+  "joinUs": {
+    "title": "Rejoignez-nous",
+    "text": "Intéressé par les études islamiques et moyen-orientales? Contactez-nous pour rejoindre WIMESSA, être informé des événements ou découvrir comment vous impliquer.",
+    "button": "Nous contacter"
+  },
+  "events": {
+    "title": "Événements",
+    "upcoming": "Prochains événements",
+    "loading": "Chargement des événements…",
+    "loadingEvent": "Chargement de l'événement…",
+    "loadError": "Impossible de charger les événements.",
+    "empty": "Aucun événement prévu.",
+    "viewAll": "Voir tous les événements",
+    "backToEvents": "Retour aux événements",
+    "notFound": "Événement introuvable.",
+    "date": "Date",
+    "time": "Heure",
+    "location": "Lieu",
+    "description": "Description",
+    "locationLabel": "Lieu : {{location}}"
+  },
+  "contact": {
+    "title": "Contact",
+    "intro": "Envoyez-nous un message et nous vous répondrons.",
+    "name": "Nom",
+    "email": "Courriel",
+    "subject": "Sujet",
+    "message": "Message",
+    "required": "*",
+    "submit": "Envoyer le message",
+    "sending": "Envoi en cours…",
+    "validateName": "Veuillez entrer votre nom.",
+    "validateEmail": "Veuillez entrer votre courriel.",
+    "validateEmailValid": "Veuillez entrer une adresse courriel valide.",
+    "validateMessage": "Veuillez entrer un message.",
+    "errorGeneric": "Une erreur s'est produite. Veuillez réessayer.",
+    "errorConnection": "Impossible d'envoyer. Vérifiez votre connexion et réessayez.",
+    "errorNotConfigured": "Le formulaire de contact n'est pas configuré.",
+    "success": "Message envoyé avec succès."
+  },
+  "maktoub": {
+    "title": "Maktoub",
+    "aboutTitle": "À propos de Maktoub",
+    "aboutText": "Maktoub est la publication annuelle de WIMESSA. C'est une collection d'essais, d'œuvres artistiques et de réflexions de notre communauté. Chaque édition capture une année d'idées et de voix en études islamiques et moyen-orientales.",
+    "archive": "Archives",
+    "backToMaktoub": "Retour à Maktoub",
+    "yearTitle": "Maktoub {{year}}",
+    "comingSoon": "L'édition Maktoub {{year}} arrive bientôt.",
+    "comingSoonGeneric": "Cette édition de Maktoub arrive bientôt.",
+    "metaDescription": "Maktoub est la publication annuelle de WIMESSA—une collection d'essais, d'art et de réflexions de notre communauté en études islamiques et moyen-orientales. Parcourez les archives par année.",
+    "metaDescriptionYear": "Lisez Maktoub {{year}} – la publication annuelle de WIMESSA pour {{year}}. Essais, art et réflexions de la communauté en études islamiques et moyen-orientales."
+  },
+  "flipbook": {
+    "loading": "Chargement…",
+    "loadError": "Impossible de charger le PDF."
+  },
+  "common": {
+    "defaultTitle": "WIMESSA",
+    "defaultDescription": "WIMESSA – Association étudiante mondiale des études islamiques et moyen-orientales. Découvrez notre communauté, nos événements et notre publication annuelle Maktoub."
+  }
+}

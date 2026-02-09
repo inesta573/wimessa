@@ -68,6 +68,38 @@
   border-bottom: none;
 }
 
+.navbar-lang {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 0.5rem;
+}
+
+.navbar-lang-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.25rem 0.4rem;
+  letter-spacing: 0.05em;
+  transition: color 0.2s ease;
+}
+
+.navbar-lang-btn:hover {
+  color: white;
+}
+
+.navbar-lang-btn--active {
+  color: white;
+}
+
+.navbar-lang-sep {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.8rem;
+}
+
 /* Hamburger toggle - hidden on desktop */
 .navbar-toggle {
   display: none;
@@ -174,6 +206,13 @@
   .navbar-menu .nav-contact {
     margin: 0.5rem 1.25rem 0;
     text-align: center;
+  }
+
+  .navbar-lang {
+    margin: 0.5rem 1.25rem 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    justify-content: center;
   }
 }
 

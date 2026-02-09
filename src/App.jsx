@@ -1,5 +1,7 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
 import Layout from './components/Layout'
+import LocaleRedirect from './components/LocaleRedirect'
+import LocaleRoutes from './components/LocaleRoutes'
 import Home from './pages/Home'
 import About from './pages/About'
 import Events from './pages/Events'
@@ -11,15 +13,24 @@ import Contact from './pages/Contact'
 const App = () => {
   return (
     <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Layout><Home /></Layout>} />
-      <Route path="/about" element={<Layout><About /></Layout>} />
-      <Route path="/events/:id" element={<Layout><EventDetail /></Layout>} />
-      <Route path="/events" element={<Layout><Events /></Layout>} />
-      <Route path="/maktoub/:year" element={<Layout><MaktoubYear /></Layout>} />
-      <Route path="/maktoub" element={<Layout><Maktoub /></Layout>} />
-      <Route path="/contact" element={<Layout><Contact /></Layout>} />
-    </Routes>
+      <Routes>
+        <Route path="/" element={<LocaleRedirect />} />
+        <Route path=":locale" element={
+          <LocaleRoutes>
+            <Layout>
+              <Outlet />
+            </Layout>
+          </LocaleRoutes>
+        }>
+          <Route index element={<Home />} />
+          <Route path="about" element={<About />} />
+          <Route path="events" element={<Events />} />
+          <Route path="events/:id" element={<EventDetail />} />
+          <Route path="maktoub" element={<Maktoub />} />
+          <Route path="maktoub/:year" element={<MaktoubYear />} />
+          <Route path="contact" element={<Contact />} />
+        </Route>
+      </Routes>
     </BrowserRouter>
   )
 }

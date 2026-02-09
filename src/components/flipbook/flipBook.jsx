@@ -1,4 +1,5 @@
 import { forwardRef, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import HTMLFlipBook from 'react-pageflip'
 import { Document, Page, pdfjs } from 'react-pdf'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
@@ -34,6 +35,7 @@ const PdfFlipPage = forwardRef(({ pageNumber, pageWidth, pageHeight }, ref) => (
 PdfFlipPage.displayName = 'PdfFlipPage'
 
 const FlipBook = ({ file, year }) => {
+  const { t } = useTranslation()
   const [numPages, setNumPages] = useState(null)
   const [loading, setLoading] = useState(!!file)
   const [error, setError] = useState(null)
@@ -61,7 +63,7 @@ const FlipBook = ({ file, year }) => {
       .then((pdf) => setNumPages(pdf.numPages))
       .catch((err) => {
         console.error('PDF load error:', err)
-        setError('Could not load the PDF.')
+        setError(true)
       })
       .finally(() => setLoading(false))
   }, [file])
@@ -69,13 +71,7 @@ const FlipBook = ({ file, year }) => {
   if (!file) {
     return (
       <div className="flipbook-message flipbook-coming-soon">
-        <p>
-          {year ? (
-            <>Maktoub {year} edition is coming soon.</>
-          ) : (
-            <>This Maktoub edition is coming soon.</>
-          )}
-        </p>
+        <p>{year ? t('maktoub.comingSoon', { year }) : t('maktoub.comingSoonGeneric')}</p>
       </div>
     )
   }
@@ -83,7 +79,7 @@ const FlipBook = ({ file, year }) => {
   if (error) {
     return (
       <div className="flipbook-message flipbook-error">
-        <p>{error}</p>
+        <p>{t('flipbook.loadError')}</p>
       </div>
     )
   }
@@ -91,7 +87,7 @@ const FlipBook = ({ file, year }) => {
   if (loading) {
     return (
       <div className="flipbook-message">
-        <p>Loading…</p>
+        <p>{t('flipbook.loading')}</p>
       </div>
     )
   }

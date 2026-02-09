@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import './Contact.css'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const Contact = () => {
+  const { t } = useTranslation()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [subject, setSubject] = useState('')
@@ -12,10 +14,10 @@ const Contact = () => {
   const [feedback, setFeedback] = useState(null)
 
   const validate = () => {
-    if (!name.trim()) return 'Please enter your name.'
-    if (!email.trim()) return 'Please enter your email.'
-    if (!EMAIL_REGEX.test(email.trim())) return 'Please enter a valid email address.'
-    if (!message.trim()) return 'Please enter a message.'
+    if (!name.trim()) return t('contact.validateName')
+    if (!email.trim()) return t('contact.validateEmail')
+    if (!EMAIL_REGEX.test(email.trim())) return t('contact.validateEmailValid')
+    if (!message.trim()) return t('contact.validateMessage')
     return null
   }
 
@@ -29,14 +31,13 @@ const Contact = () => {
     }
 
     setLoading(true)
-    // Supabase Edge Function (if configured) or Node API fallback
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
     const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
     const contactUrl = supabaseUrl && supabaseAnonKey
       ? `${supabaseUrl}/functions/v1/contact`
       : (import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/contact` : null)
     if (!contactUrl) {
-      setFeedback({ type: 'error', text: 'Contact form is not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.' })
+      setFeedback({ type: 'error', text: t('contact.errorNotConfigured') })
       setLoading(false)
       return
     }
@@ -57,11 +58,11 @@ const Contact = () => {
       if (!res.ok) {
         setFeedback({
           type: 'error',
-          text: data.error || 'Something went wrong. Please try again.',
+          text: data.error || t('contact.errorGeneric'),
         })
         return
       }
-      setFeedback({ type: 'success', text: data.message || 'Message sent successfully.' })
+      setFeedback({ type: 'success', text: data.message || t('contact.success') })
       setName('')
       setEmail('')
       setSubject('')
@@ -69,7 +70,7 @@ const Contact = () => {
     } catch {
       setFeedback({
         type: 'error',
-        text: 'Unable to send. Please check your connection and try again.',
+        text: t('contact.errorConnection'),
       })
     } finally {
       setLoading(false)
@@ -79,12 +80,12 @@ const Contact = () => {
   return (
     <main className="page contact-page">
       <div className="contact-page-inner">
-        <h1 className="contact-page-title">Contact</h1>
-        <p className="contact-page-intro">Send us a message and we’ll get back to you.</p>
+        <h1 className="contact-page-title">{t('contact.title')}</h1>
+        <p className="contact-page-intro">{t('contact.intro')}</p>
 
         <form className="contact-form" onSubmit={handleSubmit} noValidate>
           <label className="contact-label" htmlFor="contact-name">
-            Name <span className="contact-required">*</span>
+            {t('contact.name')} <span className="contact-required">{t('contact.required')}</span>
           </label>
           <input
             id="contact-name"
@@ -100,7 +101,7 @@ const Contact = () => {
           />
 
           <label className="contact-label" htmlFor="contact-email">
-            Email <span className="contact-required">*</span>
+            {t('contact.email')} <span className="contact-required">{t('contact.required')}</span>
           </label>
           <input
             id="contact-email"
@@ -116,7 +117,7 @@ const Contact = () => {
           />
 
           <label className="contact-label" htmlFor="contact-subject">
-            Subject
+            {t('contact.subject')}
           </label>
           <input
             id="contact-subject"
@@ -131,7 +132,7 @@ const Contact = () => {
           />
 
           <label className="contact-label" htmlFor="contact-message">
-            Message <span className="contact-required">*</span>
+            {t('contact.message')} <span className="contact-required">{t('contact.required')}</span>
           </label>
           <textarea
             id="contact-message"
@@ -159,7 +160,7 @@ const Contact = () => {
           )}
 
           <button type="submit" className="contact-submit" disabled={loading}>
-            {loading ? 'Sending…' : 'Send message'}
+            {loading ? t('contact.sending') : t('contact.submit')}
           </button>
         </form>
       </div>

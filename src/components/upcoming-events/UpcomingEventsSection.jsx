@@ -1,20 +1,31 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import LocaleLink from '../LocaleLink'
+import { useLocale } from '../../hooks/useLocale'
 import './upcoming-events.css'
 
-function formatEventDate(start, end) {
+function getDateLocale(locale) {
+  if (locale === 'ar') return 'ar'
+  if (locale === 'fr') return 'fr-CA'
+  return 'en-US'
+}
+
+function formatEventDate(start, end, locale) {
   const s = new Date(start)
   const e = new Date(end)
-  const date = s.toLocaleDateString(undefined, {
+  const dateLocale = getDateLocale(locale)
+  const date = s.toLocaleDateString(dateLocale, {
     weekday: 'short',
     month: 'short',
     day: 'numeric',
   })
-  const time = `${s.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })} – ${e.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}`
+  const time = `${s.toLocaleTimeString(dateLocale, { hour: 'numeric', minute: '2-digit' })} – ${e.toLocaleTimeString(dateLocale, { hour: 'numeric', minute: '2-digit' })}`
   return `${date} • ${time}`
 }
 
 const UpcomingEventsSection = () => {
+  const { t } = useTranslation()
+  const { locale } = useLocale()
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -50,20 +61,19 @@ const UpcomingEventsSection = () => {
       })
       .catch((e) => {
         console.error('Failed to load events:', e)
-        setError('Unable to load events at this time.')
+        setError(t('events.loadError'))
         setEvents([])
       })
       .finally(() => setLoading(false))
-  }, [])
-  
+  }, [t])
 
   return (
     <section className="upcoming-events-section">
-      <h2 className="upcoming-events-title">Upcoming Events</h2>
+      <h2 className="upcoming-events-title">{t('events.upcoming')}</h2>
 
       {loading && (
         <div className="upcoming-events-loading">
-          <p>Loading events...</p>
+          <p>{t('events.loading')}</p>
         </div>
       )}
 
@@ -75,7 +85,7 @@ const UpcomingEventsSection = () => {
 
       {!loading && !error && events.length === 0 && (
         <div className="upcoming-events-empty">
-          <p>No upcoming events scheduled.</p>
+          <p>{t('events.empty')}</p>
         </div>
       )}
 
@@ -88,9 +98,9 @@ const UpcomingEventsSection = () => {
                   <div className="upcoming-events-date">
                     <span className="upcoming-events-date-text">
                       {ev.start && ev.end
-                        ? formatEventDate(ev.start, ev.end)
+                        ? formatEventDate(ev.start, ev.end, locale)
                         : ev.start
-                          ? new Date(ev.start).toLocaleDateString(undefined, {
+                          ? new Date(ev.start).toLocaleDateString(getDateLocale(locale), {
                               weekday: 'short',
                               month: 'short',
                               day: 'numeric',
@@ -112,13 +122,13 @@ const UpcomingEventsSection = () => {
               return (
                 <li key={ev.id} className="upcoming-events-item">
                   {ev.id ? (
-                    <Link
+                    <LocaleLink
                       to={`/events/${encodeURIComponent(ev.id)}`}
                       state={{ event: ev }}
                       className="upcoming-events-item-link"
                     >
                       {content}
-                    </Link>
+                    </LocaleLink>
                   ) : (
                     content
                   )}
@@ -127,9 +137,9 @@ const UpcomingEventsSection = () => {
             })}
           </ul>
           <div className="upcoming-events-footer">
-            <Link to="/events" className="upcoming-events-button">
-              View all events
-            </Link>
+            <LocaleLink to="/events" className="upcoming-events-button">
+              {t('events.viewAll')}
+            </LocaleLink>
           </div>
         </>
       )}

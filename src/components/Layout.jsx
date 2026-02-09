@@ -1,21 +1,20 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import Background from './background/bacground'
 import Navbar from './navbar/navbar'
 
-const DEFAULT_TITLE = 'WIMESSA'
-const DEFAULT_DESCRIPTION = 'WIMESSA – World Islamic and Middle Eastern Studies Student Association. Explore our community, events, and annual publication Maktoub.'
-
 const Layout = ({ children }) => {
   const { pathname } = useLocation()
+  const { t } = useTranslation()
 
   useEffect(() => {
-    if (!pathname.startsWith('/maktoub')) {
-      document.title = DEFAULT_TITLE
+    if (!pathname.includes('/maktoub')) {
+      document.title = t('common.defaultTitle')
       const meta = document.querySelector('meta[name="description"]')
-      if (meta) meta.setAttribute('content', DEFAULT_DESCRIPTION)
+      if (meta) meta.setAttribute('content', t('common.defaultDescription'))
     }
-  }, [pathname])
+  }, [pathname, t])
 
   return (
     <>

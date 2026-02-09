@@ -1,17 +1,16 @@
-import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import LocaleLink from '../LocaleLink'
 import './join-us-section.css'
 
 const JoinUsSection = () => {
+  const { t } = useTranslation()
   return (
     <section className="join-us-section">
-      <h2 className="join-us-section-title">Join us</h2>
-      <p className="join-us-section-text">
-        Interested in Islamic and Middle Eastern studies? Get in touch to join WIMESSA,
-        hear about events, or learn how you can get involved.
-      </p>
-      <Link to="/contact" className="join-us-section-button">
-        Contact us
-      </Link>
+      <h2 className="join-us-section-title">{t('joinUs.title')}</h2>
+      <p className="join-us-section-text">{t('joinUs.text')}</p>
+      <LocaleLink to="/contact" className="join-us-section-button">
+        {t('joinUs.button')}
+      </LocaleLink>
     </section>
   )
 }

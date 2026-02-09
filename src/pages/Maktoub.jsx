@@ -1,12 +1,15 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import LocaleLink from '../components/LocaleLink'
+import { useLocale } from '../hooks/useLocale'
+import { formatNumber } from '../utils/numbers'
 import './Maktoub.css'
 
 const MAKTOUB_YEARS = [2024, 2023, 2022]
 
 const Maktoub = () => {
   const { t } = useTranslation()
+  const { locale } = useLocale()
 
   useEffect(() => {
     document.title = `${t('maktoub.title')} | WIMESSA`
@@ -34,7 +37,7 @@ const Maktoub = () => {
                   className="maktoub-archive-link"
                   aria-label={`Maktoub ${year}`}
                 >
-                  <span className="maktoub-archive-year">{year}</span>
+                  <span className="maktoub-archive-year">{formatNumber(year, locale)}</span>
                 </LocaleLink>
               </li>
             ))}

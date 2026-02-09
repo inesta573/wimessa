@@ -1,5 +1,7 @@
 import { forwardRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocale } from '../../hooks/useLocale'
+import { formatNumber } from '../../utils/numbers'
 import HTMLFlipBook from 'react-pageflip'
 import { Document, Page, pdfjs } from 'react-pdf'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
@@ -35,6 +37,7 @@ const PdfFlipPage = forwardRef(({ pageNumber, pageWidth, pageHeight }, ref) => (
 PdfFlipPage.displayName = 'PdfFlipPage'
 
 const FlipBook = ({ file, year }) => {
+  const { locale } = useLocale()
   const { t } = useTranslation()
   const [numPages, setNumPages] = useState(null)
   const [loading, setLoading] = useState(!!file)
@@ -69,9 +72,10 @@ const FlipBook = ({ file, year }) => {
   }, [file])
 
   if (!file) {
+    const yearDisplay = year ? formatNumber(year, locale) : ''
     return (
       <div className="flipbook-message flipbook-coming-soon">
-        <p>{year ? t('maktoub.comingSoon', { year }) : t('maktoub.comingSoonGeneric')}</p>
+        <p>{year ? t('maktoub.comingSoon', { year: yearDisplay }) : t('maktoub.comingSoonGeneric')}</p>
       </div>
     )
   }

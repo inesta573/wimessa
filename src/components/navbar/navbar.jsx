@@ -30,7 +30,6 @@ const Navbar = () => {
         <span className="navbar-toggle-bar" />
       </button>
       <ul className="navbar-menu">
-        <li><LocaleLink to="/" onClick={closeMenu}>{t('nav.home')}</LocaleLink></li>
         <li><LocaleLink to="/about" onClick={closeMenu}>{t('nav.about')}</LocaleLink></li>
         <li><LocaleLink to="/events" onClick={closeMenu}>{t('nav.events')}</LocaleLink></li>
         <li><LocaleLink to="/maktoub" onClick={closeMenu}>{t('nav.maktoub')}</LocaleLink></li>

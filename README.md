@@ -1,6 +1,30 @@
 # WIMESSA Website
 
-React + Vite frontend with Supabase for the contact form and an optional Express API for events (Google Calendar).
+React + Vite frontend for WIMESSA (Women in Islamic and Middle Eastern Studies in South Asia). Features a contact form via Supabase (Edge Function + Resend), optional Express API for events (Google Calendar iCal), and Maktoub annual publication with PDF flipbook viewer.
+
+---
+
+## Site structure
+
+| Page | Route | Description |
+|------|-------|-------------|
+| Home | `/` | Hero, About section, Upcoming Events |
+| About | `/about` | About WIMESSA, mission, team |
+| Events | `/events` | Calendar view (react-big-calendar) of upcoming events |
+| Event Detail | `/events/:id` | Individual event page with date, time, location, description |
+| Maktoub | `/maktoub` | Annual publication archive (years 2022–2024) |
+| Maktoub Year | `/maktoub/:year` | PDF flipbook viewer for a given year |
+| Contact | `/contact` | Contact form (Supabase or Node API) |
+
+---
+
+## Tech stack
+
+- **Frontend:** React 19, Vite 7, react-router-dom
+- **Contact form:** Supabase Edge Function + Resend (or optional Node API fallback)
+- **Events:** Optional Express API parsing Google Calendar iCal; `useEvents` hook; react-big-calendar, date-fns
+- **Maktoub:** react-pageflip, react-pdf for PDF flipbook viewer
+- **Deployment:** GitHub Actions → FTP deploy to SiteGround
 
 ---
 
@@ -12,11 +36,14 @@ React + Vite frontend with Supabase for the contact form and an optional Express
   `.env`, `.env.development`, `.env.production` — these hold API keys, passwords, and email addresses. They are in [.gitignore](.gitignore) and must stay out of the repo.
 
 - **What you must do after cloning:**  
-Create your own `.env` by copying [.env.example](.env.example). Fill in your own values (Resend API key, Gmail App Password, contact email, etc.). **Do not commit `.env`** or paste real keys into any file that gets committed.
+  Create your own `.env` by copying [.env.example](.env.example). Fill in your own values (Resend API key, Gmail App Password, contact email, etc.). **Do not commit `.env`** or paste real keys into any file that gets committed.
+
 - **What belongs where:**  
   - **Local development:** Put secrets only in `.env` (or `.env.development`) on your machine.  
   - **Production frontend (e.g. GitHub Actions):** Use **Settings → Secrets and variables → Actions** for `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_API_URL`, `VITE_EVENTS_API`.  
-  - **Production backend (e.g. Render):** Use the host’s **Environment** / **Variables** for `GOOGLE_CALENDAR_ICAL_URL` etc. if you run the Node API. Contact form uses Supabase (set secrets in Supabase Dashboard).
+  - **Production backend (e.g. Render):** Use the host's **Environment** / **Variables** for `GOOGLE_CALENDAR_ICAL_URL` etc. if you run the Node API.  
+  - **Supabase contact form:** Set secrets in Supabase Dashboard (Resend, contact email, etc.).
+
 - **If you ever commit a secret:** Rotate it immediately (new API key, new password) and remove the secret from git history (e.g. `git filter-branch` or BFG Repo-Cleaner). Consider the old value compromised.
 
 ---
@@ -34,68 +61,143 @@ Edit `.env` and add your own values (see [Environment variables](#environment-va
 
 ## Running locally
 
-- **Frontend**: `npm run dev` (Vite dev server; proxies `/api` to the backend).
-- **Backend**: `npm run server` (Express on port 3001).
+- **Frontend:** `npm run dev` (Vite dev server; proxies `/api` to the backend).
+- **Backend (optional):** `npm run server` (Express on port 3001).
 
-## How to test the contact form
+---
 
-The contact form uses **Supabase** (Edge Function + Resend). See [SUPABASE_CONTACT_SETUP.md](SUPABASE_CONTACT_SETUP.md) for setup.
+## Contact form
 
-1. **Set up `.env`** with `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (from Supabase Dashboard → Settings → API).
-2. **Start the frontend**: `npm run dev`, then open the URL (e.g. [http://localhost:5173](http://localhost:5173)).
-3. Go to **Contact**, fill in the form, and submit. You should see a success message; submissions are stored in Supabase and an email is sent via Resend (if configured).
+The contact form uses **Supabase** (Edge Function + Resend). It stores submissions in a Supabase table and sends email notifications.
+
+### Supabase setup
+
+1. **Create a Supabase project** and enable the Database.
+
+2. **Create the `contact_submissions` table:**
+   ```sql
+   CREATE TABLE contact_submissions (
+     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+     created_at TIMESTAMPTZ DEFAULT NOW(),
+     name TEXT NOT NULL,
+     email TEXT NOT NULL,
+     subject TEXT,
+     message TEXT NOT NULL
+   );
+   ```
+
+3. **Deploy the Edge Function:**
+   ```bash
+   supabase functions deploy contact --no-verify-jwt
+   ```
+
+4. **Set Supabase secrets** (Dashboard → Edge Functions → contact → Secrets):
+   - `RESEND_API_KEY` — Resend API key
+   - `CONTACT_EMAIL` — Email that receives submissions
+   - `SMTP_FROM` (optional) — "From" address for Resend (e.g. `onboarding@resend.dev`)
+
+5. **Set `.env`** with `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (from Supabase Dashboard → Settings → API).
+
+6. Start the frontend: `npm run dev`, go to **Contact**, fill the form, and submit.
 
 If the form says "Contact form is not configured", ensure `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are set in `.env` and in GitHub Actions secrets for production.
+
+### Optional: Node API fallback
+
+If Supabase is not configured, the frontend can use the Express API (`POST /api/contact`). See [Environment variables](#environment-variables) for `CONTACT_EMAIL`, `RESEND_API_KEY`, and SMTP vars.
+
+---
+
+## Events
+
+Events are loaded from `VITE_EVENTS_API`, which can point to the Node API (`/api/events`) or another compatible JSON API.
+
+- **Node API:** Set `GOOGLE_CALENDAR_ICAL_URL` in `.env`. The server fetches the public iCal feed, parses it, and returns events as JSON. In production, host the API (e.g. Render) and set `VITE_EVENTS_API` to its `/api/events` URL.
+- **Frontend:** The `useEvents` hook fetches events and normalizes them for react-big-calendar. Supports both `{ events }` and `{ items }` response shapes.
+- **Upcoming Events (Home):** The homepage shows upcoming events in a section; uses the same `useEvents` hook.
+
+---
+
+## Maktoub
+
+Maktoub is WIMESSA’s annual publication. The `/maktoub` page lists years (2022–2024); each year opens a PDF flipbook.
+
+To add PDFs: import the file in `src/pages/MaktoubYear.jsx` and add it to `MAKTOUB_PDFS`:
+
+```js
+import maktoub2024 from '../assets/maktoub2024.pdf'
+const MAKTOUB_PDFS = {
+  2024: maktoub2024,
+}
+```
+
+Add the year to `MAKTOUB_YEARS` in `src/pages/Maktoub.jsx` if needed.
+
+---
 
 ## Environment variables
 
 All of these are **secret or environment-specific**. Store them only in `.env` locally or in your deployment platform’s env/secrets. **Never commit them.**
 
+| Variable | Used by | Description |
+|----------|---------|-------------|
+| `VITE_SUPABASE_URL` | Frontend (build) | Supabase project URL (contact form). |
+| `VITE_SUPABASE_ANON_KEY` | Frontend (build) | Supabase anon key (contact form). |
+| `VITE_EVENTS_API` | Frontend (build) | Production events API URL (e.g. `https://your-api.com/api/events`). |
+| `VITE_API_URL` | Frontend (build) | Optional; production Node API base URL. |
+| `GOOGLE_CALENDAR_ICAL_URL` | Backend | Public iCal feed URL for the events API. |
+| `CONTACT_EMAIL` | Backend / Supabase | Email address that receives contact form submissions. |
+| `RESEND_API_KEY` | Backend / Supabase | Resend API key. |
+| `SMTP_FROM` | Backend / Supabase | "From" address when using Resend. |
+| `SMTP_USER`, `SMTP_PASS` | Backend | Gmail credentials (use an [App Password](https://support.google.com/accounts/answer/185833) with 2FA) for Node API contact fallback. |
 
-| Variable                   | Used by          | Description                                                                                            |
-| -------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------ |
-| `GOOGLE_CALENDAR_ICAL_URL` | Backend          | Public iCal feed URL for the events API.                                                               |
-| `CONTACT_EMAIL`            | Backend          | Email address that receives contact form submissions.                                                  |
-| `SMTP_USER`, `SMTP_PASS`   | Backend          | Gmail credentials (use an [App Password](https://support.google.com/accounts/answer/185833) with 2FA). |
-| `RESEND_API_KEY`           | Backend          | Resend API key; use with `SMTP_FROM` (e.g. `onboarding@resend.dev`).                                   |
-| `SMTP_FROM`                | Backend          | “From” address when using Resend.                                                                      |
-| `VITE_API_URL`             | Frontend (build) | Production API base URL; set in **GitHub Actions secrets**, not in the repo.                           |
-| `VITE_EVENTS_API`          | Frontend (build) | Production events API URL; set in **GitHub Actions secrets** if needed.                                |
+See [.env.example](.env.example) for a minimal list. Copy it to `.env` and fill in your values; keep `.env`, `.env.development`, and `.env.production` out of the repo (they are in [.gitignore](.gitignore)).
 
-
-See [.env.example](.env.example) for a full list and comments. Copy it to `.env` and fill in your values; keep `.env`, `.env.development`, and `.env.production` out of the repo (they are in [.gitignore](.gitignore)).
+---
 
 ## Production
 
 Production config and secrets are **not in the repo**. Set them in your hosting and CI platforms only.
 
-### Frontend (this repo deploys `dist/` to SiteGround via GitHub Actions)
+### Frontend (deploys `dist/` to SiteGround via GitHub Actions)
 
-- **Build-time env vars:** In GitHub go to **Settings → Secrets and variables → Actions**. Add repository secrets (do not put these in any file in the repo):
+- **Build-time env vars:** In GitHub go to **Settings → Secrets and variables → Actions**. Add repository secrets:
   - `VITE_SUPABASE_URL` — Supabase project URL (contact form).
   - `VITE_SUPABASE_ANON_KEY` — Supabase anon key (contact form).
-  - `VITE_EVENTS_API` — production events API URL if you use a separate API for events.
-  - `VITE_API_URL` — optional; production Node API base URL if you run the Express server.
-- The [deploy workflow](.github/workflows/deploy.yml) passes these into `npm run build`. The built site uses Supabase for the contact form.
+  - `VITE_EVENTS_API` — production events API URL if you use an external API.
+  - `VITE_API_URL` — optional; production Node API base URL.
+  - `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD` — SiteGround FTP credentials.
+- The [deploy workflow](.github/workflows/deploy.yml) builds the site and deploys `dist/` to `wimessa.ca/public_html/` via FTP.
 
-### Optional: Node API (events only)
+### Optional: Node API (events / contact fallback)
 
-The Express server is not deployed by the current workflow. If you run it (e.g. on Render) for the events API, set **GOOGLE_CALENDAR_ICAL_URL** and other vars in that host's dashboard. See **docs/DEPLOY_RENDER.md** if it exists.
+The Express server is not deployed by the workflow. If you run it (e.g. on Render) for the events API or contact fallback, set `GOOGLE_CALENDAR_ICAL_URL`, `CONTACT_EMAIL`, `RESEND_API_KEY`, and SMTP vars in that host’s dashboard.
+
+---
+
+## Project structure
+
+```
+├── public/
+│   └── .htaccess          # SPA routing + cache control for index.html
+├── server/
+│   └── index.js           # Express API: /api/events, /api/contact
+├── src/
+│   ├── assets/            # Images, logos
+│   ├── components/        # Hero, AboutSection, FlipBook, Navbar, etc.
+│   ├── hooks/
+│   │   └── useEvents.js   # Fetches and normalizes events from VITE_EVENTS_API
+│   ├── pages/             # Home, About, Events, EventDetail, Maktoub, MaktoubYear, Contact
+│   ├── App.jsx
+│   └── main.jsx
+├── supabase/functions/contact/
+│   └── index.ts           # Supabase Edge Function for contact form
+├── .github/workflows/deploy.yml
+└── vite.config.js         # Proxies /api to backend in dev
+```
+
 ---
 
 ## React + Vite (template notes)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and `[typescript-eslint](https://typescript-eslint.io)` in your project.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules. It uses [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) with [SWC](https://swc.rs/) for Fast Refresh.

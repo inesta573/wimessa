@@ -9,7 +9,6 @@
   z-index: 1;
   color: white;
   animation: heroLoad 0.8s ease-out forwards;
-  border: 1px solid rgba(255, 255, 255, 0.5);
   box-sizing: border-box;
 }
 

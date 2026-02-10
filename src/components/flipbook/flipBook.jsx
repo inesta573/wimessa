@@ -169,6 +169,23 @@ const FlipBook = ({ file, year }) => {
     if (flip && numPages && currentPage < numPages - 1) flip.flipNext()
   }
 
+  const [pageInput, setPageInput] = useState('1')
+  useEffect(() => {
+    setPageInput(String(currentPage + 1))
+  }, [currentPage])
+
+  const goToPage = (e) => {
+    e?.preventDefault()
+    const n = parseInt(pageInput, 10)
+    if (isNaN(n) || n < 1 || n > (numPages || 1)) return
+    const flip = bookRef.current?.pageFlip?.()
+    if (flip) {
+      flip.turnToPage(n - 1)
+      flip.update()
+      requestAnimationFrame(() => flip.update())
+    }
+  }
+
   useEffect(() => {
     if (!file) return
     setNumPages(null)
@@ -273,12 +290,22 @@ const FlipBook = ({ file, year }) => {
         >
           &lt;
         </button>
-        <span className="flipbook-page-indicator">
-          {t('flipbook.pageOf', {
-            current: formatNumber(currentPage + 1, locale),
-            total: formatNumber(numPages, locale),
-          })}
-        </span>
+        <form className="flipbook-page-jump" onSubmit={goToPage}>
+          <label className="flipbook-page-jump-label" htmlFor="flipbook-page-input">
+            <input
+              id="flipbook-page-input"
+              type="number"
+              min={1}
+              max={numPages || 1}
+              value={pageInput}
+              onChange={(e) => setPageInput(e.target.value)}
+              aria-label={t('flipbook.goToPage')}
+              className="flipbook-page-input"
+            />
+            <span className="flipbook-page-sep">/</span>
+            <span className="flipbook-page-total">{formatNumber(numPages, locale)}</span>
+          </label>
+        </form>
         <button
           type="button"
           className="flipbook-nav-arrow"

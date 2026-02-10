@@ -95,7 +95,8 @@
     "exitFullscreen": "Quitter le plein écran",
     "moreOptions": "Plus d'options",
     "prevPage": "Page précédente",
-    "nextPage": "Page suivante"
+    "nextPage": "Page suivante",
+    "goToPage": "Aller au numéro de page"
   },
   "common": {
     "defaultTitle": "WIMESSA",

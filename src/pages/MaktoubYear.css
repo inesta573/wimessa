@@ -18,7 +18,7 @@
   display: inline-block;
   color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   margin-bottom: 2rem;
 }
 
@@ -29,7 +29,7 @@
 
 .maktoub-year-title {
   margin: 0 0 0.75rem;
-  font-size: 1.75rem;
+  font-size: 1.95rem;
   font-weight: 600;
   letter-spacing: 0.02em;
   color: white;
@@ -40,7 +40,7 @@
 .maktoub-year-error {
   margin: 0 0 1.5rem;
   color: rgba(255, 255, 255, 0.9);
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 
 .maktoub-year-error {
@@ -51,7 +51,7 @@
   margin: 0 0 2rem;
   color: rgba(255, 255, 255, 0.9);
   line-height: 1.6;
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 
 @media (max-width: 768px) {

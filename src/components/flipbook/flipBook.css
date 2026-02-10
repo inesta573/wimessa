@@ -29,7 +29,7 @@
 }
 
 .flipbook-hint {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: rgba(255, 255, 255, 0.85);
 }
 
@@ -137,6 +137,50 @@
   color: rgba(255, 255, 255, 0.9);
   font-variant-numeric: tabular-nums;
   flex: 0 0 auto;
+}
+
+.flipbook-page-jump {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.flipbook-page-jump-label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-variant-numeric: tabular-nums;
+}
+
+.flipbook-page-input {
+  width: 2.5rem;
+  padding: 0.25rem 0.35rem;
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  color: white;
+  -moz-appearance: textfield;
+}
+
+.flipbook-page-input::-webkit-outer-spin-button,
+.flipbook-page-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.flipbook-page-input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.flipbook-page-sep,
+.flipbook-page-total {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .flipbook-nav-arrow {

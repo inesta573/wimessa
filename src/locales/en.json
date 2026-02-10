@@ -13,14 +13,14 @@
     "subtitle": "World Islamic and Middle Eastern Studies Student Association"
   },
   "aboutSection": {
-    "title": "About WIMESSA",
+    "title": "About Wimessa",
     "text": "The World Islamic and Middle Eastern Studies Student Association brings together students and scholars interested in Islamic and Middle Eastern studies. Learn more about our mission, history, and community.",
     "button": "Learn more",
-    "imageAlt": "About WIMESSA"
+    "imageAlt": "About Wimessa"
   },
   "mission": {
     "title": "Our Mission",
-    "text": "WIMESSA brings together students and scholars interested in Islamic and Middle Eastern studies to foster dialogue, support research, and build an inclusive community on campus and beyond."
+    "text": "Wimessa brings together students and scholars interested in Islamic and Middle Eastern studies to foster dialogue, support research, and build an inclusive community on campus and beyond."
   },
   "team": {
     "title": "Our Team",
@@ -34,7 +34,7 @@
   },
   "joinUs": {
     "title": "Join us",
-    "text": "Interested in Islamic and Middle Eastern studies? Get in touch to join WIMESSA, hear about events, or learn how you can get involved.",
+    "text": "Interested in Islamic and Middle Eastern studies? Get in touch to join Wimessa, hear about events, or learn how you can get involved.",
     "button": "Contact us"
   },
   "events": {
@@ -75,14 +75,14 @@
   "maktoub": {
     "title": "Maktoub",
     "aboutTitle": "About Maktoub",
-    "aboutText": "Maktoub is WIMESSA's annual publication. It is a collection of essays, art, and reflections from our community. Each edition captures a year of ideas and voices in Islamic and Middle Eastern studies.",
+    "aboutText": "Maktoub is Wimessa's annual publication. It is a collection of essays, art, and reflections from our community. Each edition captures a year of ideas and voices in Islamic and Middle Eastern studies.",
     "archive": "Archive",
     "backToMaktoub": "Back to Maktoub",
     "yearTitle": "Maktoub {{year}}",
     "comingSoon": "Maktoub {{year}} edition is coming soon.",
     "comingSoonGeneric": "This Maktoub edition is coming soon.",
-    "metaDescription": "Maktoub is WIMESSA's annual publication—a collection of essays, art, and reflections from our community in Islamic and Middle Eastern studies. Browse the archive by year.",
-    "metaDescriptionYear": "Read Maktoub {{year}} – WIMESSA's annual publication for {{year}}. Essays, art, and reflections from the Islamic and Middle Eastern studies community."
+    "metaDescription": "Maktoub is Wimessa's annual publication—a collection of essays, art, and reflections from our community in Islamic and Middle Eastern studies. Browse the archive by year.",
+    "metaDescriptionYear": "Read Maktoub {{year}} – Wimessa's annual publication for {{year}}. Essays, art, and reflections from the Islamic and Middle Eastern studies community."
   },
   "flipbook": {
     "loading": "Loading…",
@@ -101,5 +101,14 @@
   "common": {
     "defaultTitle": "WIMESSA",
     "defaultDescription": "WIMESSA – World Islamic and Middle Eastern Studies Student Association. Explore our community, events, and annual publication Maktoub."
+  },
+  "footer": {
+    "orgName": "World Islamic and Middle Eastern Studies Student Association",
+    "email": "mcgillmessa@gmail.com",
+    "emailLabel": "Email Wimessa",
+    "copyright": "Copyright © Wimessa McGill. All rights reserved.",
+    "backToTop": "Back to top",
+    "landAcknowledgmentTitle": "Land Acknowledgement:",
+    "landAcknowledgmentText": "Wimessa acknowledges that McGill University and the Institute of Islamic Studies are located on the unceded land of the Kanien’kehá:ka (Mohawk) people. The Kanien’kehá:ka are one of the five founding nations of the Haudenosaunee confederacy and are known as the “Keepers of the Eastern Door.” The island we call Montréal is known as Tiotia:ke in the Kanien’kehá:ka language, and has historically served as a meeting place for other Indigenous nations. In our studies in the World Islamic and Middle East Studies Department, we pursue understanding and solidarity with people in the “Middle East” and throughout the Islamicate world. We likewise affirm our desire for solidarity with indigenous communities here in Tiotia:ke and across Turtle Island (North America) by promoting an inclusive academic space for indigenous histories and narratives to be heard alongside those in our own field of study."
   }
 }

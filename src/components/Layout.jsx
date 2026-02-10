@@ -3,6 +3,8 @@ import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import Background from './background/bacground'
 import Navbar from './navbar/navbar'
+import Footer from './footer/Footer'
+import './Layout.css'
 
 const Layout = ({ children }) => {
   const { pathname } = useLocation()
@@ -17,11 +19,12 @@ const Layout = ({ children }) => {
   }, [pathname, t])
 
   return (
-    <>
+    <div className="layout">
       <Background />
       <Navbar />
-      {children}
-    </>
+      <div className="layout-content">{children}</div>
+      <Footer />
+    </div>
   )
 }
 

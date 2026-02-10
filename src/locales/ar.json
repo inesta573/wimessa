@@ -13,14 +13,14 @@
     "subtitle": "الجمعية الطلابية العالمية للدراسات الإسلامية والشرق أوسطية"
   },
   "aboutSection": {
-    "title": "عن WIMESSA",
+    "title": "عن Wimessa",
     "text": " الجمعية الطلابية العالمية للدراسات الإسلامية والشرق أوسطية تجمع بين الطلاب والباحثين المهتمين بالدراسات الإسلامية والشرق أوسطية. تعرف على المزيد عن مهمتنا وتاريخنا ومجتمعنا.",
     "button": "اعرف المزيد",
-    "imageAlt": "عن WIMESSA"
+    "imageAlt": "عن Wimessa"
   },
   "mission": {
     "title": "مهمتنا",
-    "text": "تجمع WIMESSA الطلاب والباحثين المهتمين بالدراسات الإسلامية والشرق أوسطية لتعزيز الحوار ودعم البحث وبناء مجتمع شامل في الحرم الجامعي وخارجه."
+    "text": "تجمع Wimessa الطلاب والباحثين المهتمين بالدراسات الإسلامية والشرق أوسطية لتعزيز الحوار ودعم البحث وبناء مجتمع شامل في الحرم الجامعي وخارجه."
   },
   "team": {
     "title": "فريقنا",
@@ -34,7 +34,7 @@
   },
   "joinUs": {
     "title": "انضم إلينا",
-    "text": "مهتم بالدراسات الإسلامية والشرق أوسطية؟ تواصل معنا للانضمام إلى WIMESSA والاطلاع على الفعاليات أو معرفة كيف يمكنك المشاركة.",
+    "text": "مهتم بالدراسات الإسلامية والشرق أوسطية؟ تواصل معنا للانضمام إلى Wimessa والاطلاع على الفعاليات أو معرفة كيف يمكنك المشاركة.",
     "button": "اتصل بنا"
   },
   "events": {
@@ -75,14 +75,14 @@
   "maktoub": {
     "title": "مكتوب",
     "aboutTitle": "عن مكتوب",
-    "aboutText": "مكتوب هي المجلة السنوية لـ WIMESSA. إنها مجموعة من المقالات والفن والتأملات من مجتمعنا. كل إصدار يوثق عاماً من الأفكار والأصوات في الدراسات الإسلامية والشرق أوسطية.",
+    "aboutText": "مكتوب هي المجلة السنوية لـ Wimessa. إنها مجموعة من المقالات والفن والتأملات من مجتمعنا. كل إصدار يوثق عاماً من الأفكار والأصوات في الدراسات الإسلامية والشرق أوسطية.",
     "archive": "الأرشيف",
     "backToMaktoub": "العودة إلى مكتوب",
     "yearTitle": "مكتوب {{year}}",
     "comingSoon": "إصدار مكتوب {{year}} قريباً.",
     "comingSoonGeneric": "هذا الإصدار من مكتوب قريباً.",
-    "metaDescription": "مكتوب هي المجلة السنوية لـ WIMESSA—مجموعة من المقالات والفن والتأملات من مجتمعنا في الدراسات الإسلامية والشرق أوسطية. تصفح الأرشيف حسب السنة.",
-    "metaDescriptionYear": "اقرأ مكتوب {{year}} – المجلة السنوية لـ WIMESSA لعام {{year}}. مقالات وفن وتأملات من مجتمع الدراسات الإسلامية والشرق أوسطية."
+    "metaDescription": "مكتوب هي المجلة السنوية لـ Wimessa من المقالات والفن والتأملات من مجتمعنا في الدراسات الإسلامية والشرق أوسطية. تصفح الأرشيف حسب السنة.",
+    "metaDescriptionYear": "اقرأ مكتوب {{year}} – المجلة السنوية لـ Wimessa لعام {{year}}. مقالات وفن وتأملات من مجتمع الدراسات الإسلامية والشرق أوسطية."
   },
   "flipbook": {
     "loading": "جاري التحميل…",
@@ -99,7 +99,16 @@
     "goToPage": "الانتقال إلى رقم الصفحة"
   },
   "common": {
-    "defaultTitle": "WIMESSA",
-    "defaultDescription": "WIMESSA – الجمعية الطلابية العالمية للدراسات الإسلامية والشرق أوسطية. اكتشف مجتمعنا وفعالياتنا ومجلتنا السنوية مكتوب."
+    "defaultTitle": "Wimessa",
+    "defaultDescription": "Wimessa – الجمعية الطلابية العالمية للدراسات الإسلامية والشرق أوسطية. اكتشف مجتمعنا وفعالياتنا ومجلتنا السنوية مكتوب."
+  },
+  "footer": {
+    "orgName": "World Islamic and Middle Eastern Studies Student Association",
+    "email": "mcgillmessa@gmail.com",
+    "emailLabel": "Email Wimessa",
+    "copyright": "Copyright © Wimessa McGill. All rights reserved.",
+    "backToTop": "Back to top",
+    "landAcknowledgmentTitle": "Land Acknowledgement:",
+    "landAcknowledgmentText": "Wimessa acknowledges that McGill University and the Institute of Islamic Studies are located on the unceded land of the Kanien’kehá:ka (Mohawk) people. The Kanien’kehá:ka are one of the five founding nations of the Haudenosaunee confederacy and are known as the “Keepers of the Eastern Door.” The island we call Montréal is known as Tiotia:ke in the Kanien’kehá:ka language, and has historically served as a meeting place for other Indigenous nations. In our studies in the World Islamic and Middle East Studies Department, we pursue understanding and solidarity with people in the “Middle East” and throughout the Islamicate world. We likewise affirm our desire for solidarity with indigenous communities here in Tiotia:ke and across Turtle Island (North America) by promoting an inclusive academic space for indigenous histories and narratives to be heard alongside those in our own field of study."
   }
 }

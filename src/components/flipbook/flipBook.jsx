@@ -10,7 +10,7 @@ import './flipBook.css'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
-const PAGE_ASPECT = 543 / 380
+const PAGE_ASPECT = 648 / 432
 const MIN_PAGE_WIDTH = 230
 const MAX_PAGE_WIDTH = 470
 const MAX_PAGE_WIDTH_FULLSCREEN = 750
@@ -43,6 +43,7 @@ const PdfFlipPage = forwardRef(({ pageNumber, pageWidth, pageHeight }, ref) => (
       pageNumber={pageNumber}
       width={pageWidth}
       height={pageHeight}
+      style={{ width: pageWidth, height: pageHeight, minWidth: pageWidth, minHeight: pageHeight }}
       renderTextLayer
       renderAnnotationLayer
     />

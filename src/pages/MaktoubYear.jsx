@@ -6,9 +6,10 @@ import FlipBook from '../components/flipbook/flipBook'
 import { useLocale } from '../hooks/useLocale'
 import { formatNumber } from '../utils/numbers'
 import './MaktoubYear.css'
+import maktoub2025 from '../assets/maktoub2025.pdf'
 
 const MAKTOUB_PDFS = {
-  // 2024: maktoub2024,
+  2025: maktoub2025,
 }
 
 const MaktoubYear = () => {

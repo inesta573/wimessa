@@ -86,7 +86,16 @@
   },
   "flipbook": {
     "loading": "Loading…",
-    "loadError": "Could not load the PDF."
+    "loadError": "Could not load the PDF.",
+    "hint": "Click through the pages or drag to flip.",
+    "pageOf": "{{current}}/{{total}}",
+    "firstPage": "First page",
+    "lastPage": "Last page",
+    "fullscreen": "Full screen",
+    "exitFullscreen": "Exit full screen",
+    "moreOptions": "More options",
+    "prevPage": "Previous page",
+    "nextPage": "Next page"
   },
   "common": {
     "defaultTitle": "WIMESSA",

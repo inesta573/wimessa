@@ -1,29 +1,77 @@
+/* Fullscreen container - inherits page background when not fullscreen */
+.flipbook-fullscreen-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flipbook-fullscreen-container:fullscreen,
+.flipbook-fullscreen-container:-webkit-full-screen,
+.flipbook-fullscreen-container:-moz-full-screen {
+  background: #2c3e2c; /* Match Maktoub page background */
+  padding: 1.5rem;
+  height: 100%;
+  justify-content: center;
+}
+
 .flipbook-wrapper {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 0;
-  padding: 1.5rem 1rem;
+  padding: 0.5rem 1rem 1.5rem;
   min-height: min(90vh, 600px);
   width: 100%;
   box-sizing: border-box;
+  direction: ltr; /* Keep flipbook layout stable in RTL (Arabic) */
+}
+
+.flipbook-hint {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Centering wrapper - works in both LTR and RTL (Arabic) */
+.flipbook-center {
+  width: 100%;
+  position: relative;
 }
 
 .flipbook-sizer {
-  margin: 0 auto;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
   transition: width 0.35s ease;
   overflow: hidden;
   flex-shrink: 0;
 }
 
-/* When closed: view is full book width, shifted left so only right half (cover) is visible */
+/* When closed: view is full book width, shifted to show single page */
 .flipbook-view {
   --flipbook-page-width: 380px;
   transition: transform 0.35s ease;
+  display: block;
+  position: relative;
 }
 
-.flipbook-sizer--cover .flipbook-view {
+/* Ensure Document doesn't affect flipbook layout */
+.flipbook-view .react-pdf__Document {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Cover (first page): StPageFlip puts it on the RIGHT - shift left to show right half */
+.flipbook-sizer--cover:not(.flipbook-sizer--last) .flipbook-view {
   transform: translateX(calc(-1 * var(--flipbook-page-width)));
+}
+
+/* Last page (back): StPageFlip puts it on the LEFT - show left half with no shift */
+.flipbook-sizer--last .flipbook-view {
+  transform: translateX(0);
 }
 
 
@@ -53,7 +101,7 @@
   text-align: center;
   padding: 2rem;
   color: rgba(255, 255, 255, 0.9);
-  font-size: 1rem;
+  font-size: 2rem;
 }
 
 .flipbook-coming-soon p {
@@ -67,4 +115,143 @@
 
 .flipbook-error p {
   color: #f88;
+}
+
+/* Control bar */
+.flipbook-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding: 0.6rem 1.25rem;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.flipbook-page-indicator {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-variant-numeric: tabular-nums;
+  flex: 0 0 auto;
+}
+
+.flipbook-nav-arrow {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  line-height: 1;
+  transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+}
+
+.flipbook-nav-arrow:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.flipbook-nav-arrow:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Three-dot menu and dropdown */
+.flipbook-menu {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.flipbook-menu-trigger {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.flipbook-menu-trigger:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.flipbook-menu-icon {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.flipbook-dropdown {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  padding: 0.5rem 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+  z-index: 100;
+}
+
+.flipbook-menu:hover .flipbook-dropdown,
+.flipbook-menu.is-open .flipbook-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.flipbook-dropdown::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  right: 14px;
+  width: 12px;
+  height: 12px;
+  background: white;
+  transform: rotate(45deg);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.flipbook-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border: none;
+  background: none;
+  color: #1a1a1a;
+  font-size: 0.95rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.flipbook-dropdown-item:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.flipbook-dropdown-icon {
+  flex-shrink: 0;
+  font-size: 1rem;
+  color: #555;
 }

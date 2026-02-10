@@ -86,7 +86,16 @@
   },
   "flipbook": {
     "loading": "جاري التحميل…",
-    "loadError": "تعذر تحميل ملف PDF."
+    "loadError": "تعذر تحميل ملف PDF.",
+    "hint": "انقر على الصفحات أو اسحب لتقلب الصفحات.",
+    "pageOf": "{{current}}/{{total}}",
+    "firstPage": "الصفحة الأولى",
+    "lastPage": "الصفحة الأخيرة",
+    "fullscreen": "ملء الشاشة",
+    "exitFullscreen": "الخروج من ملء الشاشة",
+    "moreOptions": "المزيد من الخيارات",
+    "prevPage": "الصفحة السابقة",
+    "nextPage": "الصفحة التالية"
   },
   "common": {
     "defaultTitle": "WIMESSA",

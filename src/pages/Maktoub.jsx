@@ -5,7 +5,7 @@ import { useLocale } from '../hooks/useLocale'
 import { formatNumber } from '../utils/numbers'
 import './Maktoub.css'
 
-const MAKTOUB_YEARS = [2024, 2023, 2022]
+const MAKTOUB_YEARS = [2025]
 
 const Maktoub = () => {
   const { t } = useTranslation()
